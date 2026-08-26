@@ -11,6 +11,7 @@ import SceneManager from "./SceneManager";
 import GameUI from "./GameUI";
 import MobileControls from "./MobileControls";
 import AudioManager from "./AudioManager";
+import { CHARACTER_STORAGE_KEY, DEFAULT_CHARACTER_ID, getCharacter } from "@/lib/game/characters";
 
 // ============================================================
 // Game — top-level component.
@@ -33,6 +34,11 @@ const INITIAL_SCORE: ScoreState = {
 
 export default function Game() {
   const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 640px)").matches;
+  const [characterId] = useState(() =>
+    typeof window !== "undefined"
+      ? getCharacter(localStorage.getItem(CHARACTER_STORAGE_KEY)).id
+      : DEFAULT_CHARACTER_ID,
+  );
   const [gameState, setGameState] = useState<GameState>("MENU");
   const [score, setScore] = useState<ScoreState>(() => ({
     ...INITIAL_SCORE,
@@ -267,6 +273,7 @@ export default function Game() {
           onCoinsCollected={handleCoinsCollected}
           onGameOver={handleGameOver}
           onScoreTick={handleScoreTick}
+          characterId={characterId}
         />
       </Canvas>
 

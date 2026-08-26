@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import type { GameState, ScoreState } from "@/lib/game/types";
 
 // ============================================================
@@ -72,6 +73,9 @@ export default function GameUI({
             >
               ▶ &nbsp; PLAY
             </button>
+            <Link href="/character" className="game-secondary-action game-character-action">
+              ◇ &nbsp; CHOOSE CHARACTER
+            </Link>
 
             {/* Best score */}
             {score.best > 0 && (

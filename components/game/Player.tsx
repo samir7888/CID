@@ -13,6 +13,9 @@ import {
   PLAYER_SLIDE_HEIGHT,
 } from "@/lib/game/constants";
 import type { Lane, PlayerAnimState, PlayerState } from "@/lib/game/types";
+import { getCharacter } from "@/lib/game/characters";
+import { useGLTF } from "@react-three/drei";
+import * as SkeletonUtils from "three/examples/jsm/utils/SkeletonUtils.js";
 
 // ============================================================
 // Player is a "dumb" visual component driven by refs/props from
@@ -40,6 +43,7 @@ interface PlayerProps {
   onAnimStateChange?: (state: PlayerAnimState) => void;
   onJumpConsumed?: () => void;
   onSlideConsumed?: () => void;
+  characterId: string;
 }
 
 export default function Player({
@@ -51,6 +55,7 @@ export default function Player({
   playerState,
   onJumpConsumed,
   onSlideConsumed,
+  characterId,
 }: PlayerProps) {
   const meshRef = useRef<THREE.Group>(null);
   const characterRef = useRef<THREE.Group>(null);
@@ -58,6 +63,7 @@ export default function Player({
   const rightLegRef = useRef<THREE.Group>(null);
   const leftArmRef = useRef<THREE.Group>(null);
   const rightArmRef = useRef<THREE.Group>(null);
+  const selectedCharacter = getCharacter(characterId);
 
   // Internal motion state lives in refs, not useState — this runs every
   // frame and must not cause React re-renders.
@@ -75,6 +81,8 @@ export default function Player({
       meshRef.current.position.y = 0;
       meshRef.current.scale.y = 1;
       characterRef.current.rotation.z = 0;
+      characterRef.current.rotation.x = 0;
+      characterRef.current.position.y = 0;
       if (playerState) {
         playerState.y = 0;
         playerState.isJumping = false;
@@ -156,6 +164,11 @@ export default function Player({
       rightArmRef.current.rotation.x = Math.sin(runPhase) * runAmount * 0.7;
     }
 
+    if (selectedCharacter.modelPath) {
+      characterRef.current.position.y = Math.abs(Math.sin(runPhase * 0.5)) * 0.035;
+      characterRef.current.rotation.x = Math.sin(runPhase) * 0.025;
+    }
+
     if (playerState) {
       playerState.currentX = currentX.current;
       playerState.targetLaneX = targetX;
@@ -175,53 +188,93 @@ export default function Player({
   return (
     <group ref={meshRef} position={[LANE_POSITIONS[lane], 0, 0]}>
       <group ref={characterRef}>
-        <group position={[0, 0.05, 0]}>
-          <mesh castShadow>
-            <boxGeometry args={[0.42, 0.18, 0.55]} />
-            <meshStandardMaterial color="#191b25" roughness={0.85} />
-          </mesh>
-        </group>
-        <mesh castShadow position={[0, 0.88, 0]}>
-          <capsuleGeometry args={[0.28, 0.58, 6, 12]} />
-          <meshStandardMaterial color={isDead ? "#4b5563" : "#d95b35"} roughness={0.72} />
-        </mesh>
-        <mesh castShadow position={[0, 0.92, 0.28]}>
-          <boxGeometry args={[0.28, 0.22, 0.04]} />
-          <meshStandardMaterial color="#f2c14e" metalness={0.35} roughness={0.4} />
-        </mesh>
-        <mesh castShadow position={[0, 1.58, 0]}>
-          <sphereGeometry args={[0.23, 16, 12]} />
-          <meshStandardMaterial color="#b96f50" roughness={0.9} />
-        </mesh>
-        <mesh castShadow position={[0, 1.75, -0.01]} scale={[1.08, 0.42, 1.08]}>
-          <sphereGeometry args={[0.23, 16, 8]} />
-          <meshStandardMaterial color="#171923" roughness={0.55} />
-        </mesh>
-        <group ref={leftArmRef} position={[-0.31, 1.02, 0]}>
-          <mesh castShadow position={[0, -0.23, 0]}>
-            <capsuleGeometry args={[0.1, 0.32, 5, 8]} />
-            <meshStandardMaterial color="#d95b35" roughness={0.72} />
-          </mesh>
-        </group>
-        <group ref={rightArmRef} position={[0.31, 1.02, 0]}>
-          <mesh castShadow position={[0, -0.23, 0]}>
-            <capsuleGeometry args={[0.1, 0.32, 5, 8]} />
-            <meshStandardMaterial color="#d95b35" roughness={0.72} />
-          </mesh>
-        </group>
-        <group ref={leftLegRef} position={[-0.14, 0.55, 0]}>
-          <mesh castShadow position={[0, -0.3, 0]}>
-            <capsuleGeometry args={[0.12, 0.42, 5, 8]} />
-            <meshStandardMaterial color="#26364d" roughness={0.8} />
-          </mesh>
-        </group>
-        <group ref={rightLegRef} position={[0.14, 0.55, 0]}>
-          <mesh castShadow position={[0, -0.3, 0]}>
-            <capsuleGeometry args={[0.12, 0.42, 5, 8]} />
-            <meshStandardMaterial color="#26364d" roughness={0.8} />
-          </mesh>
-        </group>
+        {!selectedCharacter.modelPath && (
+          <>
+            <group position={[0, 0.05, 0]}>
+              <mesh castShadow>
+                <boxGeometry args={[0.42, 0.18, 0.55]} />
+                <meshStandardMaterial color="#191b25" roughness={0.85} />
+              </mesh>
+            </group>
+            <mesh castShadow position={[0, 0.88, 0]}>
+              <capsuleGeometry args={[0.28, 0.58, 6, 12]} />
+              <meshStandardMaterial color={isDead ? "#4b5563" : "#d95b35"} roughness={0.72} />
+            </mesh>
+            <mesh castShadow position={[0, 0.92, 0.28]}>
+              <boxGeometry args={[0.28, 0.22, 0.04]} />
+              <meshStandardMaterial color="#f2c14e" metalness={0.35} roughness={0.4} />
+            </mesh>
+            <mesh castShadow position={[0, 1.58, 0]}>
+              <sphereGeometry args={[0.23, 16, 12]} />
+              <meshStandardMaterial color="#b96f50" roughness={0.9} />
+            </mesh>
+            <mesh castShadow position={[0, 1.75, -0.01]} scale={[1.08, 0.42, 1.08]}>
+              <sphereGeometry args={[0.23, 16, 8]} />
+              <meshStandardMaterial color="#171923" roughness={0.55} />
+            </mesh>
+            <group ref={leftArmRef} position={[-0.31, 1.02, 0]}>
+              <mesh castShadow position={[0, -0.23, 0]}>
+                <capsuleGeometry args={[0.1, 0.32, 5, 8]} />
+                <meshStandardMaterial color="#d95b35" roughness={0.72} />
+              </mesh>
+            </group>
+            <group ref={rightArmRef} position={[0.31, 1.02, 0]}>
+              <mesh castShadow position={[0, -0.23, 0]}>
+                <capsuleGeometry args={[0.1, 0.32, 5, 8]} />
+                <meshStandardMaterial color="#d95b35" roughness={0.72} />
+              </mesh>
+            </group>
+            <group ref={leftLegRef} position={[-0.14, 0.55, 0]}>
+              <mesh castShadow position={[0, -0.3, 0]}>
+                <capsuleGeometry args={[0.12, 0.42, 5, 8]} />
+                <meshStandardMaterial color="#26364d" roughness={0.8} />
+              </mesh>
+            </group>
+            <group ref={rightLegRef} position={[0.14, 0.55, 0]}>
+              <mesh castShadow position={[0, -0.3, 0]}>
+                <capsuleGeometry args={[0.12, 0.42, 5, 8]} />
+                <meshStandardMaterial color="#26364d" roughness={0.8} />
+              </mesh>
+            </group>
+          </>
+        )}
+        {selectedCharacter.modelPath && (
+          <ImportedCharacter
+            path={selectedCharacter.modelPath}
+            scale={selectedCharacter.modelScale}
+            yOffset={selectedCharacter.modelYOffset}
+            isDead={isDead}
+          />
+        )}
       </group>
     </group>
   );
 }
+
+function ImportedCharacter({
+  path,
+  scale = 1,
+  yOffset = 0,
+  isDead,
+}: {
+  path: string;
+  scale?: number;
+  yOffset?: number;
+  isDead: boolean;
+}) {
+  const { scene } = useGLTF(path);
+  const model = SkeletonUtils.clone(scene);
+
+  return (
+    <primitive
+      object={model}
+      scale={scale}
+      position={[0, yOffset, 0]}
+      rotation={[0, Math.PI, 0]}
+      visible={!isDead}
+    />
+  );
+}
+
+useGLTF.preload("/models/girl.glb");
+useGLTF.preload("/models/modi.glb");
