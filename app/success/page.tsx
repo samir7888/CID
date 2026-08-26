@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createBrowserSupabase } from "@/lib/db/supabase";
-import type { Profile } from "@/lib/game/inventory-types";
 
 export default function SuccessPage() {
     const router = useRouter();
@@ -96,7 +95,7 @@ export default function SuccessPage() {
                 )}
 
                 <div className="commerce-actions">
-                    <Link href="/inventory" className="game-primary-action">
+                    <Link href="/pink-coins" className="game-primary-action">
                         → BROWSE CHARACTERS
                     </Link>
                     <Link href="/game" className="game-secondary-action">
