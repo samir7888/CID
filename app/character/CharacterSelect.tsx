@@ -138,12 +138,20 @@ export default function CharacterSelect() {
                                 <span className="character-status">
                                     {selectedId === character.id ? "SELECTED" : unlocked ? "AVAILABLE" : "LOCKED"}
                                 </span>
-                                {!unlocked && <span className="character-cost">{character.unlockCost} ◆</span>}
+                                {!unlocked && (
+                                    <div className="character-lock-overlay">
+                                        <span className="character-cost-tag">{character.unlockCost} ◆</span>
+                                    </div>
+                                )}
                             </div>
                             <div className="character-card-copy">
                                 <div className="character-card-role">{character.role}</div>
                                 <h2>{character.name}</h2>
-                                <p>{unlocked ? character.description : "Unlock this operative in Inventory with Pink Coins."}</p>
+                                {unlocked ? (
+                                    <p>{character.description}</p>
+                                ) : (
+                                    <p className="character-unlock-text">Unlock for <strong>{character.unlockCost} Pink Coins</strong></p>
+                                )}
                             </div>
                         </button>
                     );

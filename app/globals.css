@@ -135,6 +135,9 @@ body {
 .character-status { position: absolute; top: 14px; left: 14px; padding: 5px 8px; color: #101313; background: var(--ui-amber); font-size: 9px; font-weight: 800; letter-spacing: .14em; }
 .character-download-status { position: absolute; left: 50%; bottom: 14px; z-index: 2; transform: translateX(-50%); padding: 6px 8px; border: 1px solid rgba(244, 185, 66, .6); color: var(--ui-amber); background: rgba(8, 11, 12, .88); font: 800 9px var(--font-sans); letter-spacing: .1em; white-space: nowrap; pointer-events: none; }
 .character-card:not(.is-selected) .character-status { color: var(--ui-muted); background: rgba(8, 11, 12, .75); }
+.character-lock-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(8, 11, 12, .6); backdrop-filter: blur(2px); }
+.character-cost-tag { padding: 10px 18px; background: var(--ui-pink); color: #fff; font: 800 22px var(--font-display); letter-spacing: .08em; border-radius: 2px; box-shadow: 4px 4px 0 rgba(232, 93, 74, .4); }
+.character-unlock-text { color: var(--ui-pink) !important; font-weight: 700 !important; }
 .character-card-copy { align-self: end; padding: 26px; }
 .character-card-role { color: var(--ui-red); font-size: 10px; font-weight: 800; letter-spacing: .18em; }
 .character-card-copy h2 { margin-top: 10px; font: 800 clamp(28px, 4vw, 48px) var(--font-display); line-height: .9; letter-spacing: .04em; }
