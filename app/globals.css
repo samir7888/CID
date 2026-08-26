@@ -118,9 +118,10 @@ body {
 .character-card { display: grid; grid-template-columns: minmax(150px, 38%) 1fr; height: 300px; padding: 0; overflow: hidden; border: 1px solid var(--ui-line); border-radius: 2px; color: var(--ui-ink); text-align: left; background: rgba(8, 11, 12, .7); cursor: pointer; transition: border-color .2s ease, box-shadow .2s ease; }
 .character-card:hover, .character-card.is-selected { border-color: var(--ui-amber); box-shadow: 8px 8px 0 rgba(232, 93, 74, .18); }
 .character-card-preview { position: relative; min-height: 300px; overflow: hidden; background: linear-gradient(160deg, #253435, #0c1112); }
+.character-preview-stage { position: relative; width: 100%; height: 100%; }
 .character-card-preview canvas { display: block; width: 100% !important; height: 100% !important; }
 .character-status { position: absolute; top: 14px; left: 14px; padding: 5px 8px; color: #101313; background: var(--ui-amber); font-size: 9px; font-weight: 800; letter-spacing: .14em; }
-.character-download-status { padding: 6px 8px; border: 1px solid rgba(244, 185, 66, .6); color: var(--ui-amber); background: rgba(8, 11, 12, .88); font: 800 9px var(--font-sans); letter-spacing: .1em; white-space: nowrap; }
+.character-download-status { position: absolute; left: 50%; bottom: 14px; z-index: 2; transform: translateX(-50%); padding: 6px 8px; border: 1px solid rgba(244, 185, 66, .6); color: var(--ui-amber); background: rgba(8, 11, 12, .88); font: 800 9px var(--font-sans); letter-spacing: .1em; white-space: nowrap; pointer-events: none; }
 .character-card:not(.is-selected) .character-status { color: var(--ui-muted); background: rgba(8, 11, 12, .75); }
 .character-card-copy { align-self: end; padding: 26px; }
 .character-card-role { color: var(--ui-red); font-size: 10px; font-weight: 800; letter-spacing: .18em; }

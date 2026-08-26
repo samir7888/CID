@@ -1,40 +1,44 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Html, useGLTF, useProgress } from "@react-three/drei";
+import { useGLTF, useProgress } from "@react-three/drei";
 import * as THREE from "three";
 import type { CharacterDefinition } from "@/lib/game/characters";
 
 export default function CharacterPreview({ character, loadModel = true }: { character: CharacterDefinition; loadModel?: boolean }) {
+    const shouldLoadModel = Boolean(character.modelPath && loadModel);
+    const [modelReady, setModelReady] = useState(false);
+    const { progress } = useProgress();
+
+    useEffect(() => {
+        setModelReady(false);
+    }, [character.id, shouldLoadModel]);
+
     return (
-        <Canvas camera={{ position: [0, 1.05, 3.2], fov: 34 }} dpr={[1, 1.5]}>
-            <ambientLight intensity={1.7} />
-            <directionalLight position={[2, 4, 3]} intensity={2.5} />
-            <DownloadStatus visible={Boolean(character.modelPath && loadModel)} />
-            {character.modelPath && loadModel ? (
-                <ModelPreview path={character.modelPath} scale={character.modelScale} yOffset={character.modelYOffset} />
-            ) : character.modelPath ? <PreviewPlaceholder /> : <AgentPreview />}
-        </Canvas>
+        <div className="character-preview-stage">
+            <Canvas camera={{ position: [0, 1.05, 3.2], fov: 34 }} dpr={[1, 1.5]}>
+                <ambientLight intensity={1.7} />
+                <directionalLight position={[2, 4, 3]} intensity={2.5} />
+                {shouldLoadModel ? (
+                    <ModelPreview path={character.modelPath!} scale={character.modelScale} yOffset={character.modelYOffset} onLoaded={() => setModelReady(true)} />
+                ) : character.modelPath ? <PreviewPlaceholder /> : <AgentPreview />}
+            </Canvas>
+            {shouldLoadModel && !modelReady && (
+                <div className="character-download-status" role="status">
+                    DOWNLOADING
+                </div>
+            )}
+        </div>
     );
 }
 
-function DownloadStatus({ visible }: { visible: boolean }) {
-    const { active, progress } = useProgress();
-    if (!visible || !active) return null;
-
-    return (
-        <Html center position={[0, -0.95, 0]}>
-            <div className="character-download-status" role="status">
-                DOWNLOADING {Math.round(progress)}%
-            </div>
-        </Html>
-    );
-}
-
-function ModelPreview({ path, scale = 1, yOffset = 0 }: { path: string; scale?: number; yOffset?: number }) {
+function ModelPreview({ path, scale = 1, yOffset = 0, onLoaded }: { path: string; scale?: number; yOffset?: number; onLoaded: () => void }) {
     const { scene } = useGLTF(path);
     const groupRef = useRef<THREE.Group>(null);
+    useEffect(() => {
+        onLoaded();
+    }, [onLoaded]);
     useFrame((_, delta) => {
         if (groupRef.current) groupRef.current.rotation.y += delta * 0.35;
     });
