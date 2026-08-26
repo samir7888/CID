@@ -72,6 +72,14 @@ body {
 .game-best-score strong { color: var(--ui-ink); font-size: 20px; font-variant-numeric: tabular-nums; }
 .game-countdown { background: radial-gradient(circle, rgba(244, 185, 66, .12), transparent 36%); }
 .game-countdown-number { color: var(--ui-amber); font: 800 clamp(96px, 18vw, 190px) var(--font-display); line-height: 1; text-shadow: 0 10px 0 rgba(232, 93, 74, .25); animation: countdownPop .6s ease-out; }
+.game-score-milestone { width: min(calc(100vw - 32px), 320px); padding: 12px 18px 14px; border: 1px solid rgba(244, 185, 66, .65); border-left: 4px solid var(--ui-amber); background: linear-gradient(110deg, rgba(8, 11, 12, .97), rgba(30, 33, 27, .94)); box-shadow: 7px 7px 0 rgba(232, 93, 74, .28), 0 12px 30px rgba(0, 0, 0, .35); color: var(--ui-ink); animation: scoreMilestoneIn .32s ease-out both; }
+.game-score-milestone-kicker { color: var(--ui-amber); font-size: 9px; font-weight: 800; letter-spacing: .2em; }
+.game-score-milestone-title { margin-top: 4px; color: #c4c9bd; font: 700 16px var(--font-display); letter-spacing: .12em; }
+.game-score-milestone-value { margin-top: 1px; color: var(--ui-ink); font: 800 34px var(--font-display); line-height: .95; letter-spacing: .06em; text-shadow: 3px 3px 0 rgba(232, 93, 74, .3); }
+.game-new-high-score { width: min(calc(100vw - 32px), 360px); padding: 14px 18px 16px; border: 1px solid rgba(232, 93, 74, .75); border-left: 4px solid var(--ui-coral); background: linear-gradient(110deg, rgba(8, 11, 12, .98), rgba(42, 28, 25, .95)); box-shadow: 7px 7px 0 rgba(244, 185, 66, .3), 0 12px 30px rgba(0, 0, 0, .4); color: var(--ui-ink); animation: scoreMilestoneIn .32s ease-out both; }
+.game-new-high-score-kicker { color: var(--ui-amber); font-size: 9px; font-weight: 800; letter-spacing: .2em; }
+.game-new-high-score-title { margin-top: 4px; color: var(--ui-ink); font: 700 18px var(--font-display); letter-spacing: .12em; }
+.game-new-high-score-value { margin-top: 2px; color: var(--ui-amber); font: 800 38px var(--font-display); line-height: .95; letter-spacing: .06em; text-shadow: 3px 3px 0 rgba(232, 93, 74, .35); }
 .game-hud { padding: max(18px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); }
 .game-hud-top { display: flex; justify-content: space-between; gap: 14px; width: min(100%, 760px); margin: 0 auto; }
 .game-stat { min-width: 132px; padding: 12px 16px 11px; border-top: 1px solid var(--ui-line); border-bottom: 1px solid var(--ui-line); background: rgba(8, 11, 12, .68); backdrop-filter: blur(10px); }
@@ -113,4 +121,9 @@ body {
 @keyframes loadingSweep {
   from { transform: translateX(-100%); }
   to { transform: translateX(230%); }
+}
+
+@keyframes scoreMilestoneIn {
+  from { transform: translateY(-12px) scale(.96); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
 }

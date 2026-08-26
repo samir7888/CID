@@ -22,11 +22,10 @@ export const JUMP_DURATION = 0.65; // seconds, full arc up+down
 export const SLIDE_DURATION = 0.7; // seconds
 
 // --- World speed / forward motion ---
-export const BASE_WORLD_SPEED = 12; // units/sec the world moves toward player
-export const MAX_WORLD_SPEED = 60;
-export const SPEED_RAMP_PER_SCORE = 0.004; // how fast speed climbs with score
+export const BASE_WORLD_SPEED = 16; // units/sec the world moves toward player
+export const MAX_WORLD_SPEED = 80;
+export const SPEED_RAMP_PER_SCORE = 2.419; // how fast speed climbs with score
 export const SPEED_STEP_INTERVAL = 5; // seconds between timed difficulty increases
-export const SPEED_STEP_MULTIPLIER = 1.2;
 
 // --- Road chunks ---
 export const ROAD_CHUNK_LENGTH = 30;
@@ -50,19 +49,19 @@ export const DIFFICULTY_BANDS = [
   {
     minScore: 500,
     label: "medium",
-    speedMultiplier: 1.25,
+    speedMultiplier: 1.85,
     chaserAggression: 0.45,
   },
   {
     minScore: 1500,
     label: "hard",
-    speedMultiplier: 1.55,
+    speedMultiplier: 2.25,
     chaserAggression: 0.7,
   },
   {
     minScore: 3000,
     label: "very-hard",
-    speedMultiplier: 1.85,
+    speedMultiplier: 2.75,
     chaserAggression: 1.0,
   },
 ] as const;

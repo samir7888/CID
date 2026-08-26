@@ -18,7 +18,6 @@ import {
   COIN_SPAWN_CHANCE,
   OBSTACLE_DENSITY_STEP,
   SPEED_STEP_INTERVAL,
-  SPEED_STEP_MULTIPLIER,
 } from "@/lib/game/constants";
 import { getWorldSpeed, getObstacleSpawnGap } from "@/lib/game/difficulty";
 import {
@@ -186,10 +185,7 @@ export default function Road({
       setPoolVersion((version) => version + 1);
     }
 
-    const speed = Math.min(
-      getWorldSpeed(score) * Math.pow(SPEED_STEP_MULTIPLIER, difficultyStep),
-      60,
-    ) * timescale;
+    const speed = getWorldSpeed(score) * timescale;
     const move = speed * delta;
 
     // Move every pooled chunk; its children stay in local chunk coordinates.

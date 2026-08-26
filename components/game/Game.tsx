@@ -2,6 +2,7 @@
 
 import { useRef, useState, useCallback, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
+import { toast, Toaster } from "sonner";
 import * as THREE from "three";
 import type { GameState, ScoreState, Lane, InputAction, ObstacleConfig } from "@/lib/game/types";
 import { MAX_DPR, CAMERA_OFFSET, CAMERA_LOOKAHEAD, COIN_VALUE } from "@/lib/game/constants";
@@ -46,11 +47,30 @@ export default function Game() {
   const chaseActiveRef = useRef(false);
   const chasedObstacleIdRef = useRef<string | null>(null);
   const chaseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const nextMilestoneRef = useRef(1000);
   const [chaseActive, setChaseActive] = useState(false);
   const [playerHit, setPlayerHit] = useState(false);
   const gameStateRef = useRef<GameState>("MENU");
 
   useEffect(() => { gameStateRef.current = gameState; }, [gameState]);
+
+  useEffect(() => {
+    if (gameState !== "PLAYING") return;
+
+    while (score.total >= nextMilestoneRef.current) {
+      const milestone = nextMilestoneRef.current;
+      toast.custom(
+        () => (
+          <div className="game-score-milestone" role="status">
+            <div className="game-score-milestone-title">SCORE CHECKPOINT</div>
+            <div className="game-score-milestone-value">{milestone.toLocaleString()}</div>
+          </div>
+        ),
+        { duration: 2600, position: "top-center" },
+      );
+      nextMilestoneRef.current += 1000;
+    }
+  }, [gameState, score.total]);
 
   useEffect(() => {
     const startMenuMusic = () => {
@@ -99,6 +119,7 @@ export default function Game() {
         laneRef.current = 1;
         jumpRef.current = false;
         slideRef.current = false;
+        nextMilestoneRef.current = 500;
         seedRng(Date.now());
         const best = parseInt(localStorage.getItem("did-best-score") ?? "0", 10);
         setScore({ ...INITIAL_SCORE, best });
@@ -138,7 +159,19 @@ export default function Game() {
     AudioManager.playSound("collision");
     AudioManager.playSound("gameOver");
     setScore((previous) => {
-      const best = Math.max(previous.total, previous.best);
+      const storedBest = parseInt(localStorage.getItem("did-best-score") ?? "0", 10);
+      const best = Math.max(previous.total, storedBest);
+      if (previous.total > storedBest) {
+        toast.custom(
+          () => (
+            <div className="game-new-high-score" role="status">
+              <div className="game-new-high-score-title">NEW HIGH SCORE</div>
+              <div className="game-new-high-score-value">{previous.total.toLocaleString()}</div>
+            </div>
+          ),
+          { duration: 4200, position: "top-center" },
+        );
+      }
       localStorage.setItem("did-best-score", String(best));
       return { ...previous, best };
     });
@@ -245,6 +278,14 @@ export default function Game() {
         onRestart={handleRestart}
         onMainMenu={handleMainMenu}
         countdown={countdown}
+      />
+
+      <Toaster
+        position="top-center"
+        expand={false}
+        visibleToasts={3}
+        offset={72}
+        containerAriaLabel="Game notifications"
       />
 
       {/* Mobile swipe handler */}
