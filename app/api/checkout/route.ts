@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
-import { requireServiceSupabase, requireUser } from "@/lib/db/server";
+import { db } from "@/lib/db";
+import { getActivePackage } from "@/lib/db/queries";
+import { requireUser } from "@/lib/db/auth";
 
 export async function POST(request: Request) {
   try {
@@ -9,11 +11,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "A package is required" }, { status: 400 });
     }
 
-    const db = requireServiceSupabase();
-    const { data: pkg, error } = await db.from("pink_coin_packages")
-      .select("id, dodo_product_id, pink_coins, price_minor, currency")
-      .eq("id", packageId).eq("active", true).single();
-    if (error || !pkg) return NextResponse.json({ error: "Package unavailable" }, { status: 404 });
+    const pkg = await getActivePackage(db, packageId);
+    if (!pkg) return NextResponse.json({ error: "Package unavailable" }, { status: 404 });
 
     const response = await fetch("https://api.dodopayments.com/checkouts", {
       method: "POST",
@@ -22,7 +21,7 @@ export async function POST(request: Request) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        product_cart: [{ product_id: pkg.dodo_product_id, quantity: 1 }],
+        product_cart: [{ product_id: pkg.dodoProductId, quantity: 1 }],
         customer: { email: user.email },
         metadata: { userId: user.id, packageId: pkg.id },
         return_url: process.env.DODO_PAYMENTS_RETURN_URL,

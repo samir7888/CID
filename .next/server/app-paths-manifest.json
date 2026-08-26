@@ -1,0 +1,18 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/checkout/route": "app/api/checkout/route.js",
+  "/api/profile/route": "app/api/profile/route.js",
+  "/api/select-character/route": "app/api/select-character/route.js",
+  "/api/unlock-character/route": "app/api/unlock-character/route.js",
+  "/api/webhooks/dodo/route": "app/api/webhooks/dodo/route.js",
+  "/auth/callback/route": "app/auth/callback/route.js",
+  "/auth/confirm/route": "app/auth/confirm/route.js",
+  "/character/page": "app/character/page.js",
+  "/game/page": "app/game/page.js",
+  "/login/page": "app/login/page.js",
+  "/page": "app/page.js",
+  "/pink-coin/page": "app/pink-coin/page.js",
+  "/pink-coins/page": "app/pink-coins/page.js",
+  "/success/page": "app/success/page.js"
+}

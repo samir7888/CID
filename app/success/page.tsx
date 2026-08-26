@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { createBrowserSupabase } from "@/lib/db/supabase";
-import type { Profile } from "@/lib/game/inventory-types";
+import { useUser } from "@clerk/nextjs";
 
 export default function SuccessPage() {
     const router = useRouter();
@@ -12,28 +11,27 @@ export default function SuccessPage() {
     const [loading, setLoading] = useState(true);
     const [pollingCount, setPollingCount] = useState(0);
     const maxPolls = 60; // Poll for up to 60 seconds (every 1 second)
+    const { isLoaded, isSignedIn } = useUser();
 
     useEffect(() => {
-        const supabase = createBrowserSupabase();
+        if (!isLoaded) return;
+        if (!isSignedIn) {
+            router.push("/login?redirect=/success");
+            return;
+        }
+
         let interval: ReturnType<typeof setInterval> | null = null;
 
         const pollBalance = async () => {
             try {
-                const { data: { user }, error: authError } = await supabase.auth.getUser();
-                if (authError || !user) {
+                const response = await fetch("/api/profile");
+                if (response.status === 401) {
                     router.push("/login?redirect=/success");
                     return;
                 }
-
-                const { data: profile, error: profileError } = await supabase
-                    .from("profiles")
-                    .select("pink_coin_balance")
-                    .eq("id", user.id)
-                    .single();
-
-                if (!profileError && profile) {
+                if (response.ok) {
+                    const profile = await response.json();
                     setBalance(profile.pink_coin_balance);
-                    // If balance > 0, coins have been credited
                     if (profile.pink_coin_balance > 0) {
                         setLoading(false);
                     }
@@ -61,7 +59,7 @@ export default function SuccessPage() {
         return () => {
             if (interval) clearInterval(interval);
         };
-    }, [router]);
+    }, [isLoaded, isSignedIn, router]);
 
     return (
         <main className="commerce-page">
@@ -96,7 +94,7 @@ export default function SuccessPage() {
                 )}
 
                 <div className="commerce-actions">
-                    <Link href="/inventory" className="game-primary-action">
+                    <Link href="/pink-coins" className="game-primary-action">
                         → BROWSE CHARACTERS
                     </Link>
                     <Link href="/game" className="game-secondary-action">

@@ -1,0 +1,3 @@
+module.exports=[33290,a=>{"use strict";var b=a.i(7997);a.s(["default",0,function({children:a}){return(0,b.jsx)("html",{lang:"en",children:(0,b.jsx)("body",{className:"bg-zinc-950 text-white antialiased",children:a})})},"metadata",0,{title:"C.I.D. — Chodu Investigation Department",description:"Run! ACP Pradyuman is chasing you down a chaotic Indian street. Dodge obstacles, collect chuts, and survive as long as you can.",keywords:["game","endless runner","3D","detective","Indian street"]}])},70864,function(a){a.n(a.i(33290))}];
+
+//# sourceMappingURL=app_layout_tsx_2144vk_._.js.map

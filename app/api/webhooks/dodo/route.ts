@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Webhook } from "standardwebhooks";
-import { requireServiceSupabase } from "@/lib/db/server";
+import { db } from "@/lib/db";
+import { completeCoinOrder } from "@/lib/db/queries";
 
 export async function POST(request: Request) {
   const body = await request.text();
@@ -22,13 +23,12 @@ export async function POST(request: Request) {
         { error: "Invalid payment metadata" },
         { status: 400 },
       );
-    const db = requireServiceSupabase();
-    const { data: result, error } = await db.rpc("complete_coin_order", {
-      p_user_id: metadata.userId,
-      p_package_id: metadata.packageId,
-      p_payment_id: event.data.payment_id,
-    });
-    if (error) throw error;
+    const result = await completeCoinOrder(
+      db,
+      metadata.userId,
+      metadata.packageId,
+      event.data.payment_id,
+    );
     if (result === "unavailable")
       return NextResponse.json(
         { error: "Package unavailable" },

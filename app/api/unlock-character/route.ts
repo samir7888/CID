@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
-import { requireServiceSupabase, requireUser } from "@/lib/db/server";
+import { db } from "@/lib/db";
+import { unlockCharacter } from "@/lib/db/queries";
+import { requireUser } from "@/lib/db/auth";
 
 export async function POST(request: Request) {
   try {
@@ -10,12 +12,8 @@ export async function POST(request: Request) {
         { error: "A character is required" },
         { status: 400 },
       );
-    const db = requireServiceSupabase();
-    const { data: result, error } = await db.rpc("unlock_character", {
-      p_user_id: user.id,
-      p_character_id: characterId,
-    });
-    if (error) throw error;
+
+    const result = await unlockCharacter(db, user.id, characterId);
     if (result === "unavailable")
       return NextResponse.json(
         { error: "Character unavailable" },
