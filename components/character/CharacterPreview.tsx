@@ -9,7 +9,6 @@ import type { CharacterDefinition } from "@/lib/game/characters";
 export default function CharacterPreview({ character, loadModel = true }: { character: CharacterDefinition; loadModel?: boolean }) {
     const shouldLoadModel = Boolean(character.modelPath && loadModel);
     const [modelReady, setModelReady] = useState(false);
-    const { progress } = useProgress();
 
     useEffect(() => {
         setModelReady(false);
@@ -22,7 +21,7 @@ export default function CharacterPreview({ character, loadModel = true }: { char
                 <directionalLight position={[2, 4, 3]} intensity={2.5} />
                 {shouldLoadModel ? (
                     <ModelPreview path={character.modelPath!} scale={character.modelScale} yOffset={character.modelYOffset} onLoaded={() => setModelReady(true)} />
-                ) : character.modelPath ? <PreviewPlaceholder /> : <AgentPreview />}
+                ) : character.modelPath ? <ModelPreview path={character.modelPath!} scale={character.modelScale} yOffset={character.modelYOffset} onLoaded={() => setModelReady(true)} /> : <AgentPreview />}
             </Canvas>
             {shouldLoadModel && !modelReady && (
                 <div className="character-download-status" role="status">
