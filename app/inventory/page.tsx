@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createBrowserSupabase } from "@/lib/db/supabase";
 import { CHARACTER_STORAGE_KEY } from "@/lib/game/characters";
+import type { InventoryCharacter, Profile } from "@/lib/game/inventory-types";
 
 export default function InventoryPage() {
   const router = useRouter();
