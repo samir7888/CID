@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 import { CHARACTERS, CHARACTER_STORAGE_KEY, DEFAULT_CHARACTER_ID } from "@/lib/game/characters";
 import CharacterPreview from "@/components/character/CharacterPreview";
 import Link from "next/link";
@@ -15,18 +16,21 @@ export default function CharacterSelect() {
     const [unlockedIds, setUnlockedIds] = useState<Set<string>>(new Set([DEFAULT_CHARACTER_ID]));
     const [saving, setSaving] = useState(false);
     const [showInsufficientCoins, setShowInsufficientCoins] = useState(false);
+    const { isLoaded, isSignedIn: clerkSignedIn } = useUser();
 
     useEffect(() => {
         const savedCharacter = localStorage.getItem(CHARACTER_STORAGE_KEY);
         if (savedCharacter) setSelectedId(savedCharacter);
 
         const loadBalance = async () => {
-            try {
-                const { createBrowserSupabase } = await import("@/lib/db/supabase");
-                const supabase = createBrowserSupabase();
-                const { data: { user } } = await supabase.auth.getUser();
-                if (!user) return;
+            if (!isLoaded) return;
+            if (!clerkSignedIn) {
+                setIsSignedIn(false);
+                setAuthChecked(true);
+                return;
+            }
 
+            try {
                 setIsSignedIn(true);
                 const response = await fetch("/api/profile");
                 if (response.ok) {
@@ -36,15 +40,10 @@ export default function CharacterSelect() {
                         setSelectedId(profile.selected_character_id);
                         localStorage.setItem(CHARACTER_STORAGE_KEY, profile.selected_character_id);
                     }
+                    const next = new Set<string>([DEFAULT_CHARACTER_ID]);
+                    (profile.owned_character_ids as string[] | undefined)?.forEach((id) => next.add(id));
+                    setUnlockedIds(next);
                 }
-
-                const { data: owned } = await supabase
-                    .from("user_characters")
-                    .select("character_id")
-                    .eq("user_id", user.id);
-                const next = new Set<string>([DEFAULT_CHARACTER_ID]);
-                owned?.forEach((row) => next.add(row.character_id));
-                setUnlockedIds(next);
             } catch {
                 // Offline/local selection remains available for the default roster.
             } finally {
@@ -53,7 +52,7 @@ export default function CharacterSelect() {
         };
 
         loadBalance();
-    }, []);
+    }, [isLoaded, clerkSignedIn]);
 
     const chooseCharacter = async (id: string) => {
         if (!authChecked) return;
@@ -140,9 +139,7 @@ export default function CharacterSelect() {
                                 </span>
                                 {!unlocked && (
                                     <>
-                                        <div className="character-lock-overlay">
-                                            <span className="character-cost-tag">{character.unlockCost} ◆</span>
-                                        </div>
+                                        
                                         <div className="character-price-badge">{character.unlockCost} ◆</div>
                                     </>
                                 )}

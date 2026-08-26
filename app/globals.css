@@ -219,6 +219,8 @@ body {
   animation: commerceRise .45s ease-out both;
 }
 .login-panel { width: min(100%, 560px); margin: 7vh auto 0; }
+.login-panel .cl-rootBox,
+.login-panel .cl-cardBox { width: 100%; }
 .game-kicker { display: inline-flex; align-items: center; gap: 10px; }
 .game-kicker::before { width: 22px; height: 2px; content: ""; background: var(--ui-red); }
 .commerce-title { max-width: 680px; margin: 14px 0 12px; color: var(--ui-ink); font: 800 clamp(48px, 8vw, 92px) var(--font-display); line-height: .86; letter-spacing: .04em; text-shadow: 5px 5px 0 rgba(232, 93, 74, .2); }

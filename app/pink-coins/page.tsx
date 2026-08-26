@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { createBrowserSupabase } from "@/lib/db/supabase";
+import { useUser } from "@clerk/nextjs";
 import type { PinkCoinPackage } from "@/lib/game/inventory-types";
 
 export default function PinkCoinsPage() {
@@ -12,23 +12,26 @@ export default function PinkCoinsPage() {
   const [user, setUser] = useState<{ id: string; email?: string } | null>(null);
   const [checkingOut, setCheckingOut] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const { isLoaded, isSignedIn, user: clerkUser } = useUser();
 
   useEffect(() => {
     const load = async () => {
-      const supabase = createBrowserSupabase();
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
-      if (!authError) setUser(user);
+      if (!isLoaded) return;
+      if (isSignedIn && clerkUser) {
+        setUser({ id: clerkUser.id, email: clerkUser.primaryEmailAddress?.emailAddress });
+      } else {
+        setUser(null);
+      }
 
-      const { data: pkgs, error: pkgError } = await supabase
-        .from("pink_coin_packages")
-        .select("*")
-        .eq("active", true)
-        .order("price_minor");
-      if (!pkgError && pkgs) setPackages(pkgs);
+      const response = await fetch("/api/packages");
+      if (response.ok) {
+        const pkgs = await response.json();
+        setPackages(pkgs);
+      }
       setLoading(false);
     };
     load();
-  }, []);
+  }, [isLoaded, isSignedIn, clerkUser]);
 
   async function handleBuy(packageId: string) {
     if (!user) {

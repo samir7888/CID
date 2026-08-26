@@ -12,7 +12,7 @@ import GameUI from "./GameUI";
 import MobileControls from "./MobileControls";
 import AudioManager from "./AudioManager";
 import { CHARACTER_STORAGE_KEY, DEFAULT_CHARACTER_ID, getCharacter } from "@/lib/game/characters";
-import { createBrowserSupabase } from "@/lib/db/supabase";
+import { useUser } from "@clerk/nextjs";
 
 // ============================================================
 // Game — top-level component.
@@ -60,38 +60,31 @@ export default function Game() {
   const [chaseActive, setChaseActive] = useState(false);
   const [playerHit, setPlayerHit] = useState(false);
   const gameStateRef = useRef<GameState>("MENU");
+  const { isLoaded, isSignedIn } = useUser();
 
   useEffect(() => {
     let cancelled = false;
     const loadSelectedCharacter = async () => {
+      if (!isLoaded || !isSignedIn) return;
       try {
-        const supabase = createBrowserSupabase();
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("selected_character_id, pink_coin_balance")
-          .eq("id", user.id)
-          .maybeSingle();
-        if (cancelled || !profile) return;
+        const response = await fetch("/api/profile");
+        if (!response.ok) return;
+        const profile = await response.json();
+        if (cancelled) return;
         setPinkCoinBalance(profile.pink_coin_balance ?? 0);
-        if (!profile.selected_character_id) return;
-        const { data: character } = await supabase
-          .from("characters")
-          .select("id, model_url")
-          .eq("id", profile.selected_character_id)
-          .maybeSingle();
-        const selected = character?.id ?? getCharacter(profile.selected_character_id).id;
+        const selectedId = profile.selected_character_id as string | null;
+        if (!selectedId) return;
+        const selected = profile.selected_character?.id ?? getCharacter(selectedId).id;
         setCharacterId(selected);
-        setCharacterModelUrl(character?.model_url ?? null);
+        setCharacterModelUrl(profile.selected_character?.model_url ?? null);
         localStorage.setItem(CHARACTER_STORAGE_KEY, selected);
       } catch {
-        // Local storage remains the offline fallback when Supabase is not configured.
+        // Local storage remains the offline fallback when the database is unavailable.
       }
     };
     loadSelectedCharacter();
     return () => { cancelled = true; };
-  }, []);
+  }, [isLoaded, isSignedIn]);
 
   useEffect(() => { gameStateRef.current = gameState; }, [gameState]);
 
