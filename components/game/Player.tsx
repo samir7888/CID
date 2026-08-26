@@ -44,6 +44,7 @@ interface PlayerProps {
   onJumpConsumed?: () => void;
   onSlideConsumed?: () => void;
   characterId: string;
+  modelUrl?: string | null;
 }
 
 export default function Player({
@@ -56,6 +57,7 @@ export default function Player({
   onJumpConsumed,
   onSlideConsumed,
   characterId,
+  modelUrl,
 }: PlayerProps) {
   const meshRef = useRef<THREE.Group>(null);
   const characterRef = useRef<THREE.Group>(null);
@@ -64,6 +66,7 @@ export default function Player({
   const leftArmRef = useRef<THREE.Group>(null);
   const rightArmRef = useRef<THREE.Group>(null);
   const selectedCharacter = getCharacter(characterId);
+  const modelPath = modelUrl || selectedCharacter.modelPath;
 
   // Internal motion state lives in refs, not useState — this runs every
   // frame and must not cause React re-renders.
@@ -164,7 +167,7 @@ export default function Player({
       rightArmRef.current.rotation.x = Math.sin(runPhase) * runAmount * 0.7;
     }
 
-    if (selectedCharacter.modelPath) {
+    if (modelPath) {
       characterRef.current.position.y = Math.abs(Math.sin(runPhase * 0.5)) * 0.035;
       characterRef.current.rotation.x = Math.sin(runPhase) * 0.025;
     }
@@ -188,7 +191,7 @@ export default function Player({
   return (
     <group ref={meshRef} position={[LANE_POSITIONS[lane], 0, 0]}>
       <group ref={characterRef}>
-        {!selectedCharacter.modelPath && (
+        {!modelPath && (
           <>
             <group position={[0, 0.05, 0]}>
               <mesh castShadow>
@@ -238,9 +241,9 @@ export default function Player({
             </group>
           </>
         )}
-        {selectedCharacter.modelPath && (
+        {modelPath && (
           <ImportedCharacter
-            path={selectedCharacter.modelPath}
+            path={modelPath}
             scale={selectedCharacter.modelScale}
             yOffset={selectedCharacter.modelYOffset}
             isDead={isDead}

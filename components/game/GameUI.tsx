@@ -17,6 +17,7 @@ interface GameUIProps {
   onRestart: () => void;
   onMainMenu: () => void;
   countdown: number; // 3..1..0 → game starts
+  pinkCoinBalance: number | null;
 }
 
 export default function GameUI({
@@ -26,6 +27,7 @@ export default function GameUI({
   onRestart,
   onMainMenu,
   countdown,
+  pinkCoinBalance,
 }: GameUIProps) {
   const [showTutorial, setShowTutorial] = useState(false);
 
@@ -76,6 +78,7 @@ export default function GameUI({
             <Link href="/character" className="game-secondary-action game-character-action">
               ◇ &nbsp; CHOOSE CHARACTER
             </Link>
+        
 
             {/* Best score */}
             {score.best > 0 && (

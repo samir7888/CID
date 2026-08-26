@@ -3,6 +3,7 @@ export interface CharacterDefinition {
   name: string;
   role: string;
   description: string;
+  unlockCost: number;
   modelPath?: string;
   modelScale?: number;
   modelYOffset?: number;
@@ -15,6 +16,7 @@ export const CHARACTERS: CharacterDefinition[] = [
     role: "FIELD OPERATIVE",
     description:
       "The original escape specialist. Fast, focused, and ready to run.",
+    unlockCost: 0,
   },
   {
     id: "girl",
@@ -22,6 +24,7 @@ export const CHARACTERS: CharacterDefinition[] = [
     role: "NEW RECRUIT",
     description:
       "A new recruit with a fearless stride and a clean getaway record.",
+    unlockCost: 50,
     modelPath: "/models/girl.glb",
     modelScale: 0.92,
     modelYOffset: 0.8,
@@ -31,6 +34,7 @@ export const CHARACTERS: CharacterDefinition[] = [
     name: "MODI",
     role: "SPECIAL OPERATIVE",
     description: "A determined operative with one more mission to outrun.",
+    unlockCost: 100,
     modelPath: "/models/modi.glb",
     modelScale: 0.92,
     modelYOffset: 0.8,

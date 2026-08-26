@@ -45,6 +45,7 @@ interface SceneManagerProps {
   onGameOver: () => void;
   onScoreTick: (survivalDelta: number, distanceDelta: number) => void;
   characterId: string;
+  characterModelUrl: string | null;
 }
 
 export default function SceneManager({
@@ -62,6 +63,7 @@ export default function SceneManager({
   onGameOver,
   onScoreTick,
   characterId,
+  characterModelUrl,
 }: SceneManagerProps) {
   const { camera } = useThree();
 
@@ -176,6 +178,7 @@ export default function SceneManager({
         onJumpConsumed={consumeJump}
         onSlideConsumed={consumeSlide}
         characterId={characterId}
+        modelUrl={characterModelUrl}
       />
 
       <Chaser
