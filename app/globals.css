@@ -120,6 +120,7 @@ body {
 .character-card-preview { position: relative; min-height: 300px; overflow: hidden; background: linear-gradient(160deg, #253435, #0c1112); }
 .character-card-preview canvas { display: block; width: 100% !important; height: 100% !important; }
 .character-status { position: absolute; top: 14px; left: 14px; padding: 5px 8px; color: #101313; background: var(--ui-amber); font-size: 9px; font-weight: 800; letter-spacing: .14em; }
+.character-download-status { padding: 6px 8px; border: 1px solid rgba(244, 185, 66, .6); color: var(--ui-amber); background: rgba(8, 11, 12, .88); font: 800 9px var(--font-sans); letter-spacing: .1em; white-space: nowrap; }
 .character-card:not(.is-selected) .character-status { color: var(--ui-muted); background: rgba(8, 11, 12, .75); }
 .character-card-copy { align-self: end; padding: 26px; }
 .character-card-role { color: var(--ui-red); font-size: 10px; font-weight: 800; letter-spacing: .18em; }

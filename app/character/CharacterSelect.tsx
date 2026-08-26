@@ -22,7 +22,7 @@ export default function CharacterSelect() {
     return (
         <main className="character-page">
             <header className="character-header">
-               
+
                 <div>
                     <div className="game-kicker">C.I.D. / FIELD OPERATIONS</div>
                     <h1 className="character-title">CHOOSE YOUR RUNNER</h1>
@@ -39,7 +39,7 @@ export default function CharacterSelect() {
                         aria-pressed={selectedId === character.id}
                     >
                         <div className="character-card-preview">
-                            <CharacterPreview character={character} />
+                            <CharacterPreview character={character} loadModel={selectedId === character.id} />
                             <span className="character-status">{selectedId === character.id ? "SELECTED" : "AVAILABLE"}</span>
                         </div>
                         <div className="character-card-copy">

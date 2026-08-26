@@ -2,19 +2,33 @@
 
 import { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
+import { Html, useGLTF, useProgress } from "@react-three/drei";
 import * as THREE from "three";
 import type { CharacterDefinition } from "@/lib/game/characters";
 
-export default function CharacterPreview({ character }: { character: CharacterDefinition }) {
+export default function CharacterPreview({ character, loadModel = true }: { character: CharacterDefinition; loadModel?: boolean }) {
     return (
         <Canvas camera={{ position: [0, 1.05, 3.2], fov: 34 }} dpr={[1, 1.5]}>
             <ambientLight intensity={1.7} />
             <directionalLight position={[2, 4, 3]} intensity={2.5} />
-            {character.modelPath ? (
+            <DownloadStatus visible={Boolean(character.modelPath && loadModel)} />
+            {character.modelPath && loadModel ? (
                 <ModelPreview path={character.modelPath} scale={character.modelScale} yOffset={character.modelYOffset} />
-            ) : <AgentPreview />}
+            ) : character.modelPath ? <PreviewPlaceholder /> : <AgentPreview />}
         </Canvas>
+    );
+}
+
+function DownloadStatus({ visible }: { visible: boolean }) {
+    const { active, progress } = useProgress();
+    if (!visible || !active) return null;
+
+    return (
+        <Html center position={[0, -0.95, 0]}>
+            <div className="character-download-status" role="status">
+                DOWNLOADING {Math.round(progress)}%
+            </div>
+        </Html>
     );
 }
 
@@ -42,5 +56,11 @@ function AgentPreview() {
     );
 }
 
-useGLTF.preload("/models/girl.glb");
-useGLTF.preload("/models/modi.glb");
+function PreviewPlaceholder() {
+    return (
+        <mesh position={[0, 0, 0]}>
+            <boxGeometry args={[0.55, 1.15, 0.38]} />
+            <meshStandardMaterial color="#26364d" roughness={0.8} />
+        </mesh>
+    );
+}
