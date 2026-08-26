@@ -137,6 +137,7 @@ body {
 .character-card:not(.is-selected) .character-status { color: var(--ui-muted); background: rgba(8, 11, 12, .75); }
 .character-lock-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(8, 11, 12, .6); backdrop-filter: blur(2px); }
 .character-cost-tag { padding: 10px 18px; background: var(--ui-pink); color: #fff; font: 800 22px var(--font-display); letter-spacing: .08em; border-radius: 2px; box-shadow: 4px 4px 0 rgba(232, 93, 74, .4); }
+.character-price-badge { position: absolute; top: 14px; right: 14px; padding: 6px 12px; background: var(--ui-pink); color: #fff; font: 800 16px var(--font-display); letter-spacing: .08em; border-radius: 2px; box-shadow: 3px 3px 0 rgba(232, 93, 74, .4); z-index: 3; }
 .character-unlock-text { color: var(--ui-pink) !important; font-weight: 700 !important; }
 .character-card-copy { align-self: end; padding: 26px; }
 .character-card-role { color: var(--ui-red); font-size: 10px; font-weight: 800; letter-spacing: .18em; }

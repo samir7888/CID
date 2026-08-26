@@ -1,0 +1,107 @@
+[
+  {
+    "route": "/character",
+    "firstLoadUncompressedJsBytes": 1440053,
+    "firstLoadChunkPaths": [
+      ".next/static/chunks/3fntmmi971322.js",
+      ".next/static/chunks/0sxrp4kh8x_yu.js",
+      ".next/static/chunks/3it7a49yhubtd.js",
+      ".next/static/chunks/3mc6dra1m0098.js",
+      ".next/static/chunks/11jq0c2_zavac.js",
+      ".next/static/chunks/02fh7_m5mrih8.js",
+      ".next/static/chunks/2e_32g43rjawq.js",
+      ".next/static/chunks/turbopack-40-4dtid8e7uh.js"
+    ]
+  },
+  {
+    "route": "/success",
+    "firstLoadUncompressedJsBytes": 716635,
+    "firstLoadChunkPaths": [
+      ".next/static/chunks/3fntmmi971322.js",
+      ".next/static/chunks/0063oc29-lsk7.js",
+      ".next/static/chunks/26u9_67o36ev2.js",
+      ".next/static/chunks/3mc6dra1m0098.js",
+      ".next/static/chunks/11jq0c2_zavac.js",
+      ".next/static/chunks/02fh7_m5mrih8.js",
+      ".next/static/chunks/2e_32g43rjawq.js",
+      ".next/static/chunks/turbopack-40-4dtid8e7uh.js"
+    ]
+  },
+  {
+    "route": "/pink-coins",
+    "firstLoadUncompressedJsBytes": 708038,
+    "firstLoadChunkPaths": [
+      ".next/static/chunks/3fntmmi971322.js",
+      ".next/static/chunks/0rpy8by_l0eb1.js",
+      ".next/static/chunks/26u9_67o36ev2.js",
+      ".next/static/chunks/3mc6dra1m0098.js",
+      ".next/static/chunks/11jq0c2_zavac.js",
+      ".next/static/chunks/02fh7_m5mrih8.js",
+      ".next/static/chunks/2e_32g43rjawq.js",
+      ".next/static/chunks/turbopack-40-4dtid8e7uh.js"
+    ]
+  },
+  {
+    "route": "/login",
+    "firstLoadUncompressedJsBytes": 707936,
+    "firstLoadChunkPaths": [
+      ".next/static/chunks/3fntmmi971322.js",
+      ".next/static/chunks/03hw3m-pup9kd.js",
+      ".next/static/chunks/26u9_67o36ev2.js",
+      ".next/static/chunks/3mc6dra1m0098.js",
+      ".next/static/chunks/11jq0c2_zavac.js",
+      ".next/static/chunks/02fh7_m5mrih8.js",
+      ".next/static/chunks/2e_32g43rjawq.js",
+      ".next/static/chunks/turbopack-40-4dtid8e7uh.js"
+    ]
+  },
+  {
+    "route": "/game",
+    "firstLoadUncompressedJsBytes": 458247,
+    "firstLoadChunkPaths": [
+      ".next/static/chunks/3fntmmi971322.js",
+      ".next/static/chunks/1k4v0r-dpewkr.js",
+      ".next/static/chunks/3mc6dra1m0098.js",
+      ".next/static/chunks/11jq0c2_zavac.js",
+      ".next/static/chunks/02fh7_m5mrih8.js",
+      ".next/static/chunks/2e_32g43rjawq.js",
+      ".next/static/chunks/turbopack-40-4dtid8e7uh.js"
+    ]
+  },
+  {
+    "route": "/",
+    "firstLoadUncompressedJsBytes": 453266,
+    "firstLoadChunkPaths": [
+      ".next/static/chunks/3fntmmi971322.js",
+      ".next/static/chunks/3mc6dra1m0098.js",
+      ".next/static/chunks/11jq0c2_zavac.js",
+      ".next/static/chunks/02fh7_m5mrih8.js",
+      ".next/static/chunks/2e_32g43rjawq.js",
+      ".next/static/chunks/turbopack-40-4dtid8e7uh.js"
+    ]
+  },
+  {
+    "route": "/_not-found",
+    "firstLoadUncompressedJsBytes": 453266,
+    "firstLoadChunkPaths": [
+      ".next/static/chunks/3fntmmi971322.js",
+      ".next/static/chunks/3mc6dra1m0098.js",
+      ".next/static/chunks/11jq0c2_zavac.js",
+      ".next/static/chunks/02fh7_m5mrih8.js",
+      ".next/static/chunks/2e_32g43rjawq.js",
+      ".next/static/chunks/turbopack-40-4dtid8e7uh.js"
+    ]
+  },
+  {
+    "route": "/pink-coin",
+    "firstLoadUncompressedJsBytes": 453266,
+    "firstLoadChunkPaths": [
+      ".next/static/chunks/3fntmmi971322.js",
+      ".next/static/chunks/3mc6dra1m0098.js",
+      ".next/static/chunks/11jq0c2_zavac.js",
+      ".next/static/chunks/02fh7_m5mrih8.js",
+      ".next/static/chunks/2e_32g43rjawq.js",
+      ".next/static/chunks/turbopack-40-4dtid8e7uh.js"
+    ]
+  }
+]

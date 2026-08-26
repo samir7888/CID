@@ -139,9 +139,12 @@ export default function CharacterSelect() {
                                     {selectedId === character.id ? "SELECTED" : unlocked ? "AVAILABLE" : "LOCKED"}
                                 </span>
                                 {!unlocked && (
-                                    <div className="character-lock-overlay">
-                                        <span className="character-cost-tag">{character.unlockCost} ◆</span>
-                                    </div>
+                                    <>
+                                        <div className="character-lock-overlay">
+                                            <span className="character-cost-tag">{character.unlockCost} ◆</span>
+                                        </div>
+                                        <div className="character-price-badge">{character.unlockCost} ◆</div>
+                                    </>
                                 )}
                             </div>
                             <div className="character-card-copy">
