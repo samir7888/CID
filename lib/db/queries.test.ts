@@ -6,12 +6,13 @@ import * as schema from "./schema";
 import { pinkCoinPackages, profiles } from "./schema";
 import {
   completeCoinOrder,
+  listActivePackages,
   ensureProfile,
   getProfile,
   selectCharacter,
   unlockCharacter,
 } from "./queries";
-import { seedCharacters } from "./seed";
+import { seedCharacters, seedPinkCoinPackages } from "./seed";
 
 const DDL = `
 CREATE TABLE IF NOT EXISTS profiles (
@@ -127,6 +128,18 @@ describe("drizzle game queries", () => {
 
     const agent = await selectCharacter(db, "user_clerk_5", "agent");
     expect(agent).toEqual({ ok: true, characterId: "agent" });
+  });
+
+  it("seeds the 50 and 100 pink coin packages with their prices", async () => {
+    await seedPinkCoinPackages(db);
+    const packages = await listActivePackages(db);
+
+    expect(
+      packages.map((pkg) => [pkg.pink_coins, pkg.price_minor]),
+    ).toEqual(expect.arrayContaining([[50, 399], [100, 699]]));
+    for (const pkg of packages) {
+      expect(pkg.dodo_product_id).toBeTruthy();
+    }
   });
 
   it("credits coins from a payment exactly once", async () => {

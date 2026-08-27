@@ -1,4 +1,4 @@
-import { characters } from "./schema";
+import { characters, pinkCoinPackages } from "./schema";
 import type { AppDatabase } from "./queries";
 
 export const CHARACTER_SEED = [
@@ -32,6 +32,27 @@ export const CHARACTER_SEED = [
   },
 ];
 
+export const PINK_COIN_PACKAGE_SEED = [
+  {
+    id: "pc-50",
+    name: "50 PINK COINS",
+    pinkCoins: 50,
+    priceMinor: 399,
+    currency: "USD",
+    dodoProductId: process.env.DODO_PRODUCT_ID_PC_50 ?? "pdt_pink_coins_50",
+    active: true,
+  },
+  {
+    id: "pc-100",
+    name: "100 PINK COINS",
+    pinkCoins: 100,
+    priceMinor: 699,
+    currency: "USD",
+    dodoProductId: process.env.DODO_PRODUCT_ID_PC_100 ?? "pdt_pink_coins_100",
+    active: true,
+  },
+];
+
 export async function seedCharacters(db: AppDatabase) {
   for (const character of CHARACTER_SEED) {
     await db
@@ -45,6 +66,25 @@ export async function seedCharacters(db: AppDatabase) {
           cost: character.cost,
           modelUrl: character.modelUrl,
           isDefault: character.isDefault,
+        },
+      });
+  }
+}
+
+export async function seedPinkCoinPackages(db: AppDatabase) {
+  for (const pkg of PINK_COIN_PACKAGE_SEED) {
+    await db
+      .insert(pinkCoinPackages)
+      .values(pkg)
+      .onConflictDoUpdate({
+        target: pinkCoinPackages.id,
+        set: {
+          name: pkg.name,
+          pinkCoins: pkg.pinkCoins,
+          priceMinor: pkg.priceMinor,
+          currency: pkg.currency,
+          dodoProductId: pkg.dodoProductId,
+          active: pkg.active,
         },
       });
   }

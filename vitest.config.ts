@@ -5,6 +5,8 @@ export default defineConfig({
   test: {
     environment: "node",
     include: ["lib/**/*.test.ts"],
+    // Each test boots its own in-process PGlite instance.
+    hookTimeout: 60_000,
   },
   resolve: {
     alias: {
