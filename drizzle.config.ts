@@ -7,4 +7,7 @@ export default defineConfig({
   dbCredentials: {
     url: process.env.DATABASE_URL ?? "postgres://cid:cid@localhost:5432/cid",
   },
+  entities: {
+    roles: false // 👈 Add this line to prevent Neon system role crashes
+  }
 });

@@ -55,6 +55,7 @@ export default function CharacterSelect() {
     }, [isLoaded, clerkSignedIn]);
 
     const chooseCharacter = async (id: string) => {
+        if (id === "agent") return;
         if (!authChecked) return;
         if (!isSignedIn) {
             router.push(`/login?redirect=${encodeURIComponent("/character")}`);
@@ -102,7 +103,7 @@ export default function CharacterSelect() {
     };
 
     return (
-        <main className="character-page">
+        <main className="relative character-page">
             <header className="character-header">
 
                 <div>
@@ -139,7 +140,7 @@ export default function CharacterSelect() {
                                 </span>
                                 {!unlocked && (
                                     <>
-                                        
+
                                         <div className="character-price-badge">{character.unlockCost} ◆</div>
                                     </>
                                 )}
@@ -166,8 +167,8 @@ export default function CharacterSelect() {
             </footer>
 
             {showInsufficientCoins && (
-                <div className="character-modal-backdrop" role="presentation" onClick={() => setShowInsufficientCoins(false)}>
-                    <section className="character-modal" role="dialog" aria-modal="true" aria-labelledby="insufficient-coins-title" onClick={(event) => event.stopPropagation()}>
+                <div className="absolute inset-y-0 inset-x-0 bg-black h-fit w-fit p-12 mx-auto  character-modal-backdrop" role="presentation" onClick={() => setShowInsufficientCoins(false)}>
+                    <section className=" h-fit px-4 py-5" role="dialog" aria-modal="true" aria-labelledby="insufficient-coins-title" onClick={(event) => event.stopPropagation()}>
                         <div className="game-kicker">ACCESS DENIED</div>
                         <h2 id="insufficient-coins-title">INSUFFICIENT PINK COINS</h2>
                         <p>You need more Pink Coins to unlock this operative.</p>

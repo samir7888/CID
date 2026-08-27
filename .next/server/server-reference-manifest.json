@@ -1,5 +1,108 @@
 {
-  "node": {},
+  "node": {
+    "00e2ec2a2302c1d8acd7ef9c660499ea8534f22428": {
+      "workers": {
+        "app/_not-found/page": {
+          "moduleId": 9101,
+          "async": false,
+          "codeHash": null
+        },
+        "app/character/page": {
+          "moduleId": 30359,
+          "async": false,
+          "codeHash": null
+        },
+        "app/game/page": {
+          "moduleId": 67123,
+          "async": false,
+          "codeHash": null
+        },
+        "app/login/[[...sign-in]]/page": {
+          "moduleId": 76598,
+          "async": false,
+          "codeHash": null
+        },
+        "app/page": {
+          "moduleId": 63731,
+          "async": false,
+          "codeHash": null
+        },
+        "app/pink-coin/page": {
+          "moduleId": 73032,
+          "async": false,
+          "codeHash": null
+        },
+        "app/pink-coins/page": {
+          "moduleId": 2369,
+          "async": false,
+          "codeHash": null
+        },
+        "app/sign-up/[[...sign-up]]/page": {
+          "moduleId": 91415,
+          "async": false,
+          "codeHash": null
+        },
+        "app/success/page": {
+          "moduleId": 70515,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js",
+      "exportedName": "invalidateCacheAction"
+    },
+    "003356e7dc8466cbd3d5597274e1277d2f0efbbd5d": {
+      "workers": {
+        "app/_not-found/page": {
+          "moduleId": 9101,
+          "async": false,
+          "codeHash": null
+        },
+        "app/character/page": {
+          "moduleId": 30359,
+          "async": false,
+          "codeHash": null
+        },
+        "app/game/page": {
+          "moduleId": 67123,
+          "async": false,
+          "codeHash": null
+        },
+        "app/login/[[...sign-in]]/page": {
+          "moduleId": 76598,
+          "async": false,
+          "codeHash": null
+        },
+        "app/page": {
+          "moduleId": 63731,
+          "async": false,
+          "codeHash": null
+        },
+        "app/pink-coin/page": {
+          "moduleId": 73032,
+          "async": false,
+          "codeHash": null
+        },
+        "app/pink-coins/page": {
+          "moduleId": 2369,
+          "async": false,
+          "codeHash": null
+        },
+        "app/sign-up/[[...sign-up]]/page": {
+          "moduleId": 91415,
+          "async": false,
+          "codeHash": null
+        },
+        "app/success/page": {
+          "moduleId": 70515,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js",
+      "exportedName": "deleteKeylessAction"
+    }
+  },
   "edge": {},
-  "encryptionKey": "2Xciioxdj5ZaIK5gXhH6/C55ekHXbBICZORXJgMADbM="
+  "encryptionKey": "1f+tWrQt+AXMMsOqP9x7i/IJQAK1+MvCHeoCuDer1h4="
 }

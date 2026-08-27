@@ -3,7 +3,7 @@ import postgres from "postgres";
 import * as schema from "./schema";
 
 function getDatabaseUrl() {
-  const url = process.env.DATABASE_URL;
+  const url = process.env.DATABASE_URL ?? "postgresql://neondb_owner:npg_nAgirzpSZ9B4@ep-green-darkness-azfbawql-pooler.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"; 
   if (!url) throw new Error("DATABASE_URL is not configured");
   return url;
 }

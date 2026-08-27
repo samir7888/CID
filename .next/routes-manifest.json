@@ -21,7 +21,24 @@
     "afterFiles": [],
     "fallback": []
   },
-  "dynamicRoutes": [],
+  "dynamicRoutes": [
+    {
+      "page": "/login/[[...sign-in]]",
+      "regex": "^/login(?:/(.+?))?(?:/)?$",
+      "routeKeys": {
+        "nxtPsignin": "nxtPsign-in"
+      },
+      "namedRegex": "^/login(?:/(?<nxtPsignin>.+?))?(?:/)?$"
+    },
+    {
+      "page": "/sign-up/[[...sign-up]]",
+      "regex": "^/sign\\-up(?:/(.+?))?(?:/)?$",
+      "routeKeys": {
+        "nxtPsignup": "nxtPsign-up"
+      },
+      "namedRegex": "^/sign\\-up(?:/(?<nxtPsignup>.+?))?(?:/)?$"
+    }
+  ],
   "staticRoutes": [
     {
       "page": "/",
@@ -48,6 +65,12 @@
       "namedRegex": "^/api/checkout(?:/)?$"
     },
     {
+      "page": "/api/packages",
+      "regex": "^/api/packages(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/packages(?:/)?$"
+    },
+    {
       "page": "/api/profile",
       "regex": "^/api/profile(?:/)?$",
       "routeKeys": {},
@@ -66,22 +89,16 @@
       "namedRegex": "^/api/unlock\\-character(?:/)?$"
     },
     {
+      "page": "/api/webhooks/clerk",
+      "regex": "^/api/webhooks/clerk(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/webhooks/clerk(?:/)?$"
+    },
+    {
       "page": "/api/webhooks/dodo",
       "regex": "^/api/webhooks/dodo(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/api/webhooks/dodo(?:/)?$"
-    },
-    {
-      "page": "/auth/callback",
-      "regex": "^/auth/callback(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/auth/callback(?:/)?$"
-    },
-    {
-      "page": "/auth/confirm",
-      "regex": "^/auth/confirm(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/auth/confirm(?:/)?$"
     },
     {
       "page": "/character",
@@ -94,12 +111,6 @@
       "regex": "^/game(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/game(?:/)?$"
-    },
-    {
-      "page": "/login",
-      "regex": "^/login(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/login(?:/)?$"
     },
     {
       "page": "/pink-coin",
