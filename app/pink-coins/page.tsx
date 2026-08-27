@@ -5,6 +5,13 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import type { PinkCoinPackage } from "@/lib/game/inventory-types";
 
+function formatPrice(priceMinor: number, currency: string) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+  }).format(priceMinor / 100);
+}
+
 export default function PinkCoinsPage() {
   const router = useRouter();
   const [packages, setPackages] = useState<PinkCoinPackage[]>([]);
@@ -49,7 +56,7 @@ export default function PinkCoinsPage() {
       });
       const data = await res.json();
       if (!res.ok || !data.url) throw new Error(data.error || "Checkout failed");
-      window.location.href = data.url;
+      window.location.assign(data.url);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Checkout failed");
       setCheckingOut(null);
@@ -65,6 +72,10 @@ export default function PinkCoinsPage() {
 
         {loading ? (
           <div className="store-loading">Loading packages...</div>
+        ) : packages.length === 0 ? (
+          <p className="commerce-message error" role="alert">
+            No packages are available right now. Try again later.
+          </p>
         ) : (
           <>
             <div className="store-grid">
@@ -77,7 +88,7 @@ export default function PinkCoinsPage() {
                   <div className="store-card-content">
                     <h3 className="store-card-name">{pkg.name}</h3>
                     <div className="store-card-price">
-                      ${(pkg.price_minor / 100).toFixed(2)}
+                      {formatPrice(pkg.price_minor, pkg.currency)}
                     </div>
                     <button
                       onClick={() => handleBuy(pkg.id)}
@@ -93,7 +104,7 @@ export default function PinkCoinsPage() {
             {error && <p className="commerce-message error" role="alert">{error}</p>}
             {!user && (
               <p className="commerce-note">
-                You'll be asked to log in when you click Buy.
+                You&apos;ll be asked to log in when you click Buy.
               </p>
             )}
           </>

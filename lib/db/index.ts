@@ -1,27 +1,41 @@
-import { drizzle } from "drizzle-orm/postgres-js";
+import { drizzle, type PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./schema";
 
-function getDatabaseUrl() {
-  const url = process.env.DATABASE_URL;
-  if (!url) throw new Error("DATABASE_URL is not configured");
-  return url;
-}
+export type Database = PostgresJsDatabase<typeof schema>;
 
 const globalForDb = globalThis as unknown as {
   postgres?: ReturnType<typeof postgres>;
 };
 
-const client =
-  globalForDb.postgres ??
-  postgres(getDatabaseUrl(), {
-    max: 10,
-    prepare: false,
-  });
+let database: Database | undefined;
 
-if (process.env.NODE_ENV !== "production") {
-  globalForDb.postgres = client;
+function getDatabase(): Database {
+  if (database) return database;
+
+  const url = process.env.DATABASE_URL;
+  if (!url) throw new Error("DATABASE_URL is not configured");
+
+  const client =
+    globalForDb.postgres ??
+    postgres(url, {
+      max: 10,
+      prepare: false,
+    });
+
+  if (process.env.NODE_ENV !== "production") {
+    globalForDb.postgres = client;
+  }
+
+  database = drizzle(client, { schema });
+  return database;
 }
 
-export const db = drizzle(client, { schema });
-export type Database = typeof db;
+// Connects on first use so builds and tooling do not require DATABASE_URL.
+export const db = new Proxy({} as Database, {
+  get(_target, property) {
+    const instance = getDatabase();
+    const value = Reflect.get(instance, property);
+    return typeof value === "function" ? value.bind(instance) : value;
+  },
+});

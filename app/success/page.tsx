@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
@@ -9,7 +9,7 @@ export default function SuccessPage() {
     const router = useRouter();
     const [balance, setBalance] = useState<number | null>(null);
     const [loading, setLoading] = useState(true);
-    const [pollingCount, setPollingCount] = useState(0);
+    const pollingCount = useRef(0);
     const maxPolls = 60; // Poll for up to 60 seconds (every 1 second)
     const { isLoaded, isSignedIn } = useUser();
 
@@ -40,14 +40,11 @@ export default function SuccessPage() {
                 console.error("Balance polling error:", err);
             }
 
-            setPollingCount((prev) => {
-                const next = prev + 1;
-                if (next >= maxPolls) {
-                    if (interval) clearInterval(interval);
-                    setLoading(false);
-                }
-                return next;
-            });
+            pollingCount.current += 1;
+            if (pollingCount.current >= maxPolls) {
+                if (interval) clearInterval(interval);
+                setLoading(false);
+            }
         };
 
         // Poll immediately

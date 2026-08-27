@@ -9,7 +9,11 @@ import Link from "next/link";
 
 export default function CharacterSelect() {
     const router = useRouter();
-    const [selectedId, setSelectedId] = useState(DEFAULT_CHARACTER_ID);
+    const [selectedId, setSelectedId] = useState(() =>
+        typeof window !== "undefined"
+            ? localStorage.getItem(CHARACTER_STORAGE_KEY) ?? DEFAULT_CHARACTER_ID
+            : DEFAULT_CHARACTER_ID,
+    );
     const [pinkCoinBalance, setPinkCoinBalance] = useState<number | null>(null);
     const [isSignedIn, setIsSignedIn] = useState(false);
     const [authChecked, setAuthChecked] = useState(false);
@@ -19,9 +23,6 @@ export default function CharacterSelect() {
     const { isLoaded, isSignedIn: clerkSignedIn } = useUser();
 
     useEffect(() => {
-        const savedCharacter = localStorage.getItem(CHARACTER_STORAGE_KEY);
-        if (savedCharacter) setSelectedId(savedCharacter);
-
         const loadBalance = async () => {
             if (!isLoaded) return;
             if (!clerkSignedIn) {
