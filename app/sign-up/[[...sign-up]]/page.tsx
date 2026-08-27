@@ -33,7 +33,7 @@ export default function SignUpPage() {
           signInUrl="/login"
           appearance={clerkAppearance}
         />
-        <button className="commerce-back" onClick={() => router.push("/login")}>
+        <button className="commerce-back" onClick={() => router.replace("/login")}>
           ← BACK TO SIGN IN
         </button>
       </section>

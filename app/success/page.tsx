@@ -71,8 +71,8 @@ export default function SuccessPage() {
 
                 {loading ? (
                     <>
-                        <p className="commerce-copy">
-                            Your payment is being processed. Your Pink Coins will appear in a moment…
+                        <p className="commerce-copy success-copy">
+                            Payment received. We are adding your Pink Coins now.
                         </p>
                         <div className="commerce-loading">
                             <div className="commerce-loading-bar"><span /></div>
@@ -80,25 +80,25 @@ export default function SuccessPage() {
                         </div>
                     </>
                 ) : (
-                    <>
-                        <p className="commerce-copy">
-                            Your purchase is complete! {balance !== null ? `You now have ${balance.toLocaleString()} Pink Coins.` : ""}
+                    <div className="my-4">
+                        <p className=" text-base font-bold">
+                            Purchase complete. {balance !== null ? `Balance: ${balance.toLocaleString()} Pink Coins.` : "Your coins are ready."}
                         </p>
-                        <div className="commerce-success-action">
-                            <div className="game-score-milestone" role="status">
+                        <div className="commerce-success-action m-4">
+                            <div className="gap-3 game-score-milestone flex " role="status">
                                 <div className="game-score-milestone-title">TRANSACTION COMPLETE</div>
                                 <div className="game-score-milestone-value">✓</div>
                             </div>
                         </div>
-                    </>
+                    </div>
                 )}
 
-                <div className="commerce-actions">
-                    <Link href="/pink-coins" className="game-primary-action">
-                        → BROWSE CHARACTERS
+                <div className="commerce-actions success-actions">
+                    <Link href="/game" replace className="game-primary-action">
+                        Back to the Game
                     </Link>
-                    <Link href="/game" className="game-secondary-action">
-                        BACK TO GAME
+                    <Link href="/character" replace className="game-secondary-action">
+                        VIEW CHARACTERS
                     </Link>
                 </div>
             </section>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
+import { useClerk, useUser } from "@clerk/nextjs";
 import { CHARACTERS, CHARACTER_STORAGE_KEY, DEFAULT_CHARACTER_ID } from "@/lib/game/characters";
 import CharacterPreview from "@/components/character/CharacterPreview";
 import Link from "next/link";
@@ -17,6 +17,13 @@ export default function CharacterSelect() {
     const [saving, setSaving] = useState(false);
     const [showInsufficientCoins, setShowInsufficientCoins] = useState(false);
     const { isLoaded, isSignedIn: clerkSignedIn } = useUser();
+    const { signOut } = useClerk();
+
+    const handleSignOut = async () => {
+        await signOut();
+        localStorage.clear();
+        router.replace("/game");
+    };
 
     useEffect(() => {
         const savedCharacter = localStorage.getItem(CHARACTER_STORAGE_KEY);
@@ -55,7 +62,11 @@ export default function CharacterSelect() {
     }, [isLoaded, clerkSignedIn]);
 
     const chooseCharacter = async (id: string) => {
-        if (id === "agent") return;
+        if (id === "agent") {
+            setSelectedId(id);
+            localStorage.setItem(CHARACTER_STORAGE_KEY, id);
+            return;
+        };
         if (!authChecked) return;
         if (!isSignedIn) {
             router.push(`/login?redirect=${encodeURIComponent("/character")}`);
@@ -120,6 +131,11 @@ export default function CharacterSelect() {
                         </span>
                         <span className="character-coin-buy">BUY +</span>
                     </Link>
+                    {clerkSignedIn && (
+                        <button type="button" className="game-secondary-action character-sign-out" onClick={handleSignOut}>
+                            SIGN OUT
+                        </button>
+                    )}
                 </div>
             </header>
 

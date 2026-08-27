@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  allowedDevOrigins: ["192.168.1.4","http://172.25.112.1", "localhost"],
+  // Move it out of experimental
+  allowedDevOrigins: ['hug-likewise-captive.ngrok-free.dev'], 
 };
 
 module.exports = nextConfig;

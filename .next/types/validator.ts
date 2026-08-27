@@ -83,15 +83,6 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
-// Validate ../../app/pink-coin/page.tsx
-{
-  type __IsExpected<Specific extends AppPageConfig<"/pink-coin">> = Specific
-  const handler = {} as typeof import("../../app/pink-coin/page.js")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
-}
-
 // Validate ../../app/pink-coins/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/pink-coins">> = Specific

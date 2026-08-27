@@ -27,11 +27,6 @@
           "async": false,
           "codeHash": null
         },
-        "app/pink-coin/page": {
-          "moduleId": 73032,
-          "async": false,
-          "codeHash": null
-        },
         "app/pink-coins/page": {
           "moduleId": 2369,
           "async": false,
@@ -75,11 +70,6 @@
         },
         "app/page": {
           "moduleId": 63731,
-          "async": false,
-          "codeHash": null
-        },
-        "app/pink-coin/page": {
-          "moduleId": 73032,
           "async": false,
           "codeHash": null
         },

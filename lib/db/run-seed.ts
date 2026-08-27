@@ -1,12 +1,17 @@
-import { db } from "./index";
-import { seedCharacters } from "./seed";
+import { config } from "dotenv";
+config({ path: ".env.local" });
 
-seedCharacters(db)
-  .then(() => {
-    console.log("Seeded characters");
-    process.exit(0);
-  })
+import { db } from "./index";
+import { seedCharacters, seedPackages } from "./seed";
+
+async function run() {
+  await seedCharacters(db);
+  await seedPackages(db);
+  console.log("Seeded characters and Pink Coin packages");
+}
+
+run()
   .catch((error) => {
     console.error(error);
-    process.exit(1);
+    process.exitCode = 1;
   });

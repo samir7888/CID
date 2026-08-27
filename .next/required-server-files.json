@@ -85,7 +85,7 @@
     "productionBrowserSourceMaps": false,
     "excludeDefaultMomentLocales": true,
     "reactProductionProfiling": false,
-    "reactStrictMode": true,
+    "reactStrictMode": null,
     "reactMaxHeadersLength": 6000,
     "httpAgentOptions": {
       "keepAlive": true
@@ -107,9 +107,7 @@
     },
     "outputFileTracingRoot": "C:\\Users\\basne\\OneDrive\\Desktop\\cid",
     "allowedDevOrigins": [
-      "192.168.1.4",
-      "http://172.25.112.1",
-      "localhost"
+      "hug-likewise-captive.ngrok-free.dev"
     ],
     "enablePrerenderSourceMaps": true,
     "cacheComponents": false,

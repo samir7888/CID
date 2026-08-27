@@ -15,7 +15,7 @@ export const profiles = pgTable(
   {
     id: text("id").primaryKey(),
     pinkCoinBalance: integer("pink_coin_balance").notNull().default(0),
-    selectedCharacterId: text("selected_character_id"),
+    selectedCharacterId: text("selected_character_id").notNull().default("agent"),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),

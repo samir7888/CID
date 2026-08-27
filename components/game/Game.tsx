@@ -73,8 +73,7 @@ export default function Game() {
         if (cancelled) return;
         setPinkCoinBalance(profile.pink_coin_balance ?? 0);
         const selectedId = profile.selected_character_id as string | null;
-        if (!selectedId) return;
-        const selected = profile.selected_character?.id ?? getCharacter(selectedId).id;
+        const selected = profile.selected_character?.id ?? getCharacter(selectedId ?? DEFAULT_CHARACTER_ID).id;
         setCharacterId(selected);
         setCharacterModelUrl(profile.selected_character?.model_url ?? null);
         localStorage.setItem(CHARACTER_STORAGE_KEY, selected);

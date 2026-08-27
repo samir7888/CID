@@ -99,7 +99,7 @@ export default function PinkCoinsPage() {
           </>
         )}
 
-        <button className="commerce-back" onClick={() => router.back()}>← BACK</button>
+        <button className="commerce-back" onClick={() => router.replace("/game")}>← BACK</button>
       </section>
     </main>
   );

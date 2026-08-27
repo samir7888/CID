@@ -12,7 +12,6 @@
   "/game/page": "/game",
   "/login/[[...sign-in]]/page": "/login/[[...sign-in]]",
   "/page": "/",
-  "/pink-coin/page": "/pink-coin",
   "/pink-coins/page": "/pink-coins",
   "/sign-up/[[...sign-up]]/page": "/sign-up/[[...sign-up]]",
   "/success/page": "/success"

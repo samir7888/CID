@@ -12,7 +12,6 @@
   "/game/page": "app/game/page.js",
   "/login/[[...sign-in]]/page": "app/login/[[...sign-in]]/page.js",
   "/page": "app/page.js",
-  "/pink-coin/page": "app/pink-coin/page.js",
   "/pink-coins/page": "app/pink-coins/page.js",
   "/sign-up/[[...sign-up]]/page": "app/sign-up/[[...sign-up]]/page.js",
   "/success/page": "app/success/page.js"

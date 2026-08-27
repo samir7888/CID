@@ -113,12 +113,6 @@
       "namedRegex": "^/game(?:/)?$"
     },
     {
-      "page": "/pink-coin",
-      "regex": "^/pink\\-coin(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/pink\\-coin(?:/)?$"
-    },
-    {
       "page": "/pink-coins",
       "regex": "^/pink\\-coins(?:/)?$",
       "routeKeys": {},

@@ -11,12 +11,50 @@ function safeRedirect(value: string | null) {
 const clerkAppearance = {
   variables: {
     colorPrimary: "#f4b942",
-    colorBackground: "#12181a",
+    colorBackground: "#182426",
     colorText: "#f8f4e8",
-    colorTextSecondary: "#9da6a8",
-    colorInputBackground: "#0e1314",
-    colorInputText: "#f8f4e8",
-    borderRadius: "0.5rem",
+    colorTextSecondary: "#c4c9bd",
+    colorInputBackground: "#f3f0df",
+    colorInputText: "#182426",
+    borderRadius: "0.125rem",
+  },
+  elements: {
+    card: {
+      backgroundColor: "#182426",
+      border: "1px solid rgba(248, 244, 232, 0.18)",
+      boxShadow: "none",
+    },
+    headerTitle: {
+      color: "#f8f4e8",
+      fontFamily: "'Barlow Condensed', Impact, sans-serif",
+      fontSize: "2rem",
+      letterSpacing: "0.04em",
+    },
+    headerSubtitle: { color: "#c4c9bd" },
+    formFieldLabel: { color: "#f4b942" },
+    formFieldInput: {
+      color: "#182426",
+      backgroundColor: "#f3f0df",
+      border: "2px solid #c4c9bd",
+    },
+    formFieldInputShowPasswordButton: { color: "#536466" },
+    formFieldAction: { color: "#ffb84d" },
+    formButtonPrimary: {
+      color: "#182426",
+      backgroundColor: "#f4b942",
+      fontWeight: "800",
+      letterSpacing: "0.08em",
+    },
+    socialButtonsBlockButton: {
+      color: "#f8f4e8",
+      backgroundColor: "#253536",
+      border: "1px solid rgba(248, 244, 232, 0.3)",
+    },
+    socialButtonsBlockButtonText: { color: "#f8f4e8" },
+    dividerLine: { backgroundColor: "rgba(248, 244, 232, 0.2)" },
+    dividerText: { color: "#c4c9bd" },
+    footerActionText: { color: "#c4c9bd" },
+    footerActionLink: { color: "#ffb84d" },
   },
 };
 
@@ -46,7 +84,7 @@ function LoginForm() {
           signUpUrl="/sign-up"
           appearance={clerkAppearance}
         />
-        <button className="commerce-back" onClick={() => router.push(redirectTo)}>
+        <button className="commerce-back" onClick={() => router.replace(redirectTo)}>
           ← BACK
         </button>
       </section>

@@ -34,15 +34,16 @@ export async function getProfile(db: AppDatabase, userId: string) {
     .from(userCharacters)
     .where(eq(userCharacters.userId, userId));
 
+  const selectedCharacterId = profile?.selectedCharacterId ?? "agent";
   let selectedCharacter: { id: string; modelUrl: string | null } | null = null;
-  if (profile?.selectedCharacterId) {
+  if (selectedCharacterId) {
     const [character] = await db
       .select({
         id: characters.id,
         modelUrl: characters.modelUrl,
       })
       .from(characters)
-      .where(eq(characters.id, profile.selectedCharacterId))
+      .where(eq(characters.id, selectedCharacterId))
       .limit(1);
     selectedCharacter = character ?? null;
   }
@@ -50,7 +51,7 @@ export async function getProfile(db: AppDatabase, userId: string) {
   return {
     id: profile!.id,
     pink_coin_balance: profile!.pinkCoinBalance,
-    selected_character_id: profile!.selectedCharacterId,
+    selected_character_id: selectedCharacter?.id ?? "agent",
     owned_character_ids: owned.map((row: { characterId: string }) => row.characterId),
     selected_character: selectedCharacter
       ? { id: selectedCharacter.id, model_url: selectedCharacter.modelUrl }
@@ -159,7 +160,7 @@ export async function selectCharacter(
     .limit(1);
   if (!character) return { ok: false as const, error: "unavailable" as const };
 
-  if (!character.isDefault) {
+  if (characterId !== "agent" && !character.isDefault) {
     const [owned] = await db
       .select({ characterId: userCharacters.characterId })
       .from(userCharacters)
@@ -190,6 +191,7 @@ export async function completeCoinOrder(
 ): Promise<CompleteOrderResult> {
   return db.transaction(async (tx: AppDatabase) => {
     await ensureProfile(tx, userId);
+    console.log("inside coin order",userId,packageId,paymentId)
     const [pkg] = await tx
       .select()
       .from(pinkCoinPackages)
