@@ -1,4 +1,6 @@
 import { and, eq, sql } from "drizzle-orm";
+import type { PgDatabase, PgQueryResultHKT } from "drizzle-orm/pg-core";
+import type * as schema from "./schema";
 import {
   characters,
   orders,
@@ -8,7 +10,8 @@ import {
   type PinkCoinPackage,
 } from "./schema";
 
-export type AppDatabase = any;
+// Driver-agnostic so both the postgres-js client and the PGlite test client fit.
+export type AppDatabase = PgDatabase<PgQueryResultHKT, typeof schema>;
 
 export async function ensureProfile(db: AppDatabase, userId: string) {
   await db

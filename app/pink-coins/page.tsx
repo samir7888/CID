@@ -49,7 +49,7 @@ export default function PinkCoinsPage() {
       });
       const data = await res.json();
       if (!res.ok || !data.url) throw new Error(data.error || "Checkout failed");
-      window.location.href = data.url;
+      window.location.assign(data.url);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Checkout failed");
       setCheckingOut(null);
@@ -93,7 +93,7 @@ export default function PinkCoinsPage() {
             {error && <p className="commerce-message error" role="alert">{error}</p>}
             {!user && (
               <p className="commerce-note">
-                You'll be asked to log in when you click Buy.
+                You&apos;ll be asked to log in when you click Buy.
               </p>
             )}
           </>

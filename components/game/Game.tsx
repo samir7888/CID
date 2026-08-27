@@ -5,7 +5,7 @@ import { Canvas } from "@react-three/fiber";
 import { toast, Toaster } from "sonner";
 import * as THREE from "three";
 import type { GameState, ScoreState, Lane, InputAction, ObstacleConfig } from "@/lib/game/types";
-import { MAX_DPR, CAMERA_OFFSET, CAMERA_LOOKAHEAD, COIN_VALUE } from "@/lib/game/constants";
+import { MAX_DPR, CAMERA_OFFSET, COIN_VALUE } from "@/lib/game/constants";
 import { seedRng } from "@/lib/game/random";
 import SceneManager from "./SceneManager";
 import GameUI from "./GameUI";
@@ -41,7 +41,6 @@ export default function Game() {
       : DEFAULT_CHARACTER_ID,
   );
   const [characterModelUrl, setCharacterModelUrl] = useState<string | null>(null);
-  const [pinkCoinBalance, setPinkCoinBalance] = useState<number | null>(null);
   const [gameState, setGameState] = useState<GameState>("MENU");
   const [score, setScore] = useState<ScoreState>(() => ({
     ...INITIAL_SCORE,
@@ -71,7 +70,6 @@ export default function Game() {
         if (!response.ok) return;
         const profile = await response.json();
         if (cancelled) return;
-        setPinkCoinBalance(profile.pink_coin_balance ?? 0);
         const selectedId = profile.selected_character_id as string | null;
         if (!selectedId) return;
         const selected = profile.selected_character?.id ?? getCharacter(selectedId).id;
@@ -314,7 +312,6 @@ export default function Game() {
         onRestart={handleRestart}
         onMainMenu={handleMainMenu}
         countdown={countdown}
-        pinkCoinBalance={pinkCoinBalance}
       />
 
       <Toaster

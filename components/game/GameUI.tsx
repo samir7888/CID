@@ -17,7 +17,6 @@ interface GameUIProps {
   onRestart: () => void;
   onMainMenu: () => void;
   countdown: number; // 3..1..0 → game starts
-  pinkCoinBalance: number | null;
 }
 
 export default function GameUI({
@@ -27,7 +26,6 @@ export default function GameUI({
   onRestart,
   onMainMenu,
   countdown,
-  pinkCoinBalance,
 }: GameUIProps) {
   const [showTutorial, setShowTutorial] = useState(false);
 
@@ -35,11 +33,15 @@ export default function GameUI({
     // Show mobile tutorial once per session
     const isMobile = "ontouchstart" in window;
     const seen = sessionStorage.getItem("did-tutorial-seen");
-    if (isMobile && !seen && gameState === "PLAYING") {
-      setShowTutorial(true);
-      sessionStorage.setItem("did-tutorial-seen", "1");
-      setTimeout(() => setShowTutorial(false), 3500);
-    }
+    if (!isMobile || seen || gameState !== "PLAYING") return;
+
+    sessionStorage.setItem("did-tutorial-seen", "1");
+    const show = setTimeout(() => setShowTutorial(true), 0);
+    const hide = setTimeout(() => setShowTutorial(false), 3500);
+    return () => {
+      clearTimeout(show);
+      clearTimeout(hide);
+    };
   }, [gameState]);
 
   return (
