@@ -10,7 +10,7 @@ export interface CharacterDefinition {
 }
 
 export const CHARACTERS: CharacterDefinition[] = [
-  {
+    {
     id: "agent",
     name: "THE AGENT",
     role: "FIELD OPERATIVE",
@@ -20,10 +20,10 @@ export const CHARACTERS: CharacterDefinition[] = [
   },
   {
     id: "girl",
-    name: "THE RUNNER",
+    name: "BYDD SHYTT",
     role: "NEW RECRUIT",
     description:
-      "A new recruit with a fearless stride and a clean getaway record.",
+      "A new lund sa chamakta chera with phool se mehekti badd shytt.",
     unlockCost: 50,
     modelPath: "/models/girl.glb",
     modelScale: 0.92,
@@ -31,9 +31,9 @@ export const CHARACTERS: CharacterDefinition[] = [
   },
   {
     id: "modi",
-    name: "MODI",
-    role: "SPECIAL OPERATIVE",
-    description: "A determined operative with one more mission to outrun.",
+    name: "MODI JI",
+    role: "SPECIAL BJP OPERATIVE",
+    description: "A determined melody paglu.",
     unlockCost: 100,
     modelPath: "/models/modi.glb",
     modelScale: 0.92,

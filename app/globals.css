@@ -788,6 +788,87 @@ body {
   letter-spacing: .14em;
 }
 
+.character-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(4, 6, 6, .82);
+  backdrop-filter: blur(6px);
+  animation: modalBackdropIn .15s ease-out;
+}
+
+.character-modal {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  padding: clamp(24px, 5vw, 34px) clamp(22px, 5vw, 30px) 26px;
+  border: 1px solid var(--ui-line);
+  border-top: 3px solid var(--ui-pink);
+  background: var(--ui-panel);
+  box-shadow: 10px 10px 0 rgba(255, 111, 145, .16), 0 24px 60px rgba(0, 0, 0, .4);
+  text-align: left;
+  animation: modalRise .22s cubic-bezier(.2, .9, .3, 1) both;
+}
+
+.character-modal-kicker {
+  color: var(--ui-pink);
+}
+
+.character-modal-kicker::before {
+  background: var(--ui-pink);
+}
+
+.character-modal-title {
+  margin-top: 12px;
+  color: var(--ui-ink);
+  font: 800 clamp(24px, 5vw, 30px) var(--font-display);
+  line-height: .95;
+  letter-spacing: .04em;
+  text-shadow: 3px 3px 0 rgba(232, 93, 74, .22);
+}
+
+.character-modal-copy {
+  margin-top: 14px;
+  color: var(--ui-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.character-modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.character-modal-actions .game-primary-action,
+.character-modal-actions .game-secondary-action {
+  flex: 1;
+  min-height: 48px;
+  padding: 0 14px;
+  font-size: 12px;
+  text-align: center;
+}
+
+@keyframes modalBackdropIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalRise {
+  from {
+    transform: translateY(10px) scale(.96);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
 .character-footer .game-primary-action {
   flex-shrink: 0;
 }
@@ -861,6 +942,20 @@ body {
     grid-row: 1;
     align-items: stretch;
     padding-top: 48px;
+  }
+
+    .character-modal {
+    max-width: 100%;
+    padding: 24px 20px 22px;
+  }
+
+  .character-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .character-modal-actions .game-primary-action,
+  .character-modal-actions .game-secondary-action {
+    width: 100%;
   }
 
   .character-title {

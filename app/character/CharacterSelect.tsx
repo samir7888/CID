@@ -62,11 +62,7 @@ export default function CharacterSelect() {
     }, [isLoaded, clerkSignedIn]);
 
     const chooseCharacter = async (id: string) => {
-        if (id === "agent") {
-            setSelectedId(id);
-            localStorage.setItem(CHARACTER_STORAGE_KEY, id);
-            return;
-        };
+
         if (!authChecked) return;
         if (!isSignedIn) {
             router.push(`/login?redirect=${encodeURIComponent("/character")}`);
@@ -126,7 +122,7 @@ export default function CharacterSelect() {
                     <Link href="/pink-coins" className="character-coin-balance">
                         <span className="coin-mark">◆</span>
                         <span>
-                            <small>PINK COINS</small>
+                            <small>PINK CHUTS</small>
                             <strong>{pinkCoinBalance === null ? 0 : pinkCoinBalance.toLocaleString()}</strong>
                         </span>
                         <span className="character-coin-buy">BUY +</span>
@@ -140,7 +136,7 @@ export default function CharacterSelect() {
             </header>
 
             <section className="character-grid" aria-label="Available characters">
-                {CHARACTERS.map((character) => {
+                {CHARACTERS.slice(1).map((character) => {
                     const unlocked = unlockedIds.has(character.id);
                     return (
                         <button
@@ -164,11 +160,10 @@ export default function CharacterSelect() {
                             <div className="character-card-copy">
                                 <div className="character-card-role">{character.role}</div>
                                 <h2>{character.name}</h2>
-                                {unlocked ? (
-                                    <p>{character.description}</p>
-                                ) : (
-                                    <p className="character-unlock-text">Unlock for <strong>{character.unlockCost} Pink Coins</strong></p>
-                                )}
+                                <p>{character.description}</p>
+                                {
+                                    !unlocked && <p className="character-unlock-text">Unlock for <strong>{character.unlockCost} Pink Chuts</strong></p>
+                                }
                             </div>
                         </button>
                     );
@@ -178,23 +173,39 @@ export default function CharacterSelect() {
             <footer className="character-footer">
                 <span>ACTIVE OPERATIVE: {CHARACTERS.find((character) => character.id === selectedId)?.name}</span>
                 <button className="game-primary-action" onClick={() => router.push("/game")} disabled={saving}>
-                    {saving ? "SAVING..." : "RUN WITH THIS CHARACTER →"}
+                    {saving ? "SAVING..." : "Back to Game →"}
                 </button>
             </footer>
 
             {showInsufficientCoins && (
-                <div className="absolute inset-y-0 inset-x-0 bg-black h-fit w-fit p-12 mx-auto  character-modal-backdrop" role="presentation" onClick={() => setShowInsufficientCoins(false)}>
-                    <section className=" h-fit px-4 py-5" role="dialog" aria-modal="true" aria-labelledby="insufficient-coins-title" onClick={(event) => event.stopPropagation()}>
-                        <div className="game-kicker">ACCESS DENIED</div>
-                        <h2 id="insufficient-coins-title">INSUFFICIENT PINK COINS</h2>
-                        <p>You need more Pink Coins to unlock this operative.</p>
-                        <div className="character-modal-actions">
-                            <button className="game-primary-action" onClick={() => router.push("/pink-coins")}>BUY PINK COINS</button>
-                            <button className="game-secondary-action" onClick={() => setShowInsufficientCoins(false)}>CLOSE</button>
-                        </div>
-                    </section>
-                </div>
-            )}
+    <div
+        className="character-modal-backdrop"
+        role="presentation"
+        onClick={() => setShowInsufficientCoins(false)}
+    >
+        <section
+            className="character-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="insufficient-coins-title"
+            onClick={(event) => event.stopPropagation()}
+        >
+            <div className="game-kicker character-modal-kicker">ACCESS DENIED</div>
+            <h2 id="insufficient-coins-title" className="character-modal-title">
+                INSUFFICIENT PINK CHUTS
+            </h2>
+            <p className="character-modal-copy">You need more Pink Chuts to unlock this operative.</p>
+            <div className="character-modal-actions">
+                <button className="game-primary-action" onClick={() => router.push("/pink-coins")}>
+                    BUY PINK CHUTS
+                </button>
+                <button className="game-secondary-action" onClick={() => setShowInsufficientCoins(false)}>
+                    CLOSE
+                </button>
+            </div>
+        </section>
+    </div>
+)}
         </main>
     );
 }

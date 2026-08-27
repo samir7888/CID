@@ -60,8 +60,8 @@ export default function PinkCoinsPage() {
     <main className="commerce-page">
       <section className="commerce-panel store-panel">
         <div className="game-kicker">C.I.D. / COSMETICS</div>
-        <h1 className="commerce-title">PINK COINS</h1>
-        <p className="commerce-copy">Unlock premium characters and cosmetics with Pink Coins. Purchase now, enjoy forever.</p>
+        <h1 className="commerce-title">PINK CHUTS</h1>
+        <p className="commerce-copy">Unlock premium characters and cosmetics with Pink Chuts. Purchase now, enjoy forever.</p>
 
         {loading ? (
           <div className="store-loading">Loading packages...</div>
