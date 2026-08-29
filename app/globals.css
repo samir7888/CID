@@ -1070,6 +1070,31 @@ body {
   animation: commerceRise .45s ease-out both;
 }
 
+.failure-panel {
+  border-top: 3px solid var(--ui-red);
+  box-shadow: 14px 14px 0 rgba(232, 93, 74, .25), 0 24px 70px rgba(0, 0, 0, .4);
+}
+
+.failure-title {
+  text-shadow: 5px 5px 0 rgba(232, 93, 74, .35);
+}
+
+.failure-milestone {
+  border-color: rgba(232, 93, 74, .75);
+  border-left: 4px solid var(--ui-red);
+  background: linear-gradient(110deg, rgba(8, 11, 12, .98), rgba(42, 28, 25, .95));
+}
+
+.failure-milestone .game-score-milestone-title {
+  color: #e5a49c;
+}
+
+.failure-milestone .game-score-milestone-value {
+  color: var(--ui-red);
+  text-shadow: 3px 3px 0 rgba(232, 93, 74, .45);
+}
+
+
 .login-panel {
   width: min(100%, 560px);
   margin: 7vh auto 0;

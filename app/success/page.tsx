@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 
-export default function SuccessPage() {
+function SuccessContent() {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const [balance, setBalance] = useState<number | null>(null);
     const [loading, setLoading] = useState(true);
     const [pollingCount, setPollingCount] = useState(0);
@@ -14,6 +15,12 @@ export default function SuccessPage() {
     const { isLoaded, isSignedIn } = useUser();
 
     useEffect(() => {
+        const status = searchParams.get("status");
+        if (status === "failed" || status === "cancelled" || status === "canceled" || status === "error") {
+            router.replace(`/failure?${searchParams.toString()}`);
+            return;
+        }
+
         if (!isLoaded) return;
         if (!isSignedIn) {
             router.push("/login?redirect=/success");
@@ -59,7 +66,7 @@ export default function SuccessPage() {
         return () => {
             if (interval) clearInterval(interval);
         };
-    }, [isLoaded, isSignedIn, router]);
+    }, [isLoaded, isSignedIn, router, searchParams]);
 
     return (
         <main className="commerce-page">
@@ -103,5 +110,22 @@ export default function SuccessPage() {
                 </div>
             </section>
         </main>
+    );
+}
+
+export default function SuccessPage() {
+    return (
+        <Suspense
+            fallback={
+                <main className="commerce-page">
+                    <section className="commerce-panel success-panel">
+                        <div className="game-kicker">C.I.D. / TRANSACTION</div>
+                        <h1 className="commerce-title">PROCESSING PAYMENT</h1>
+                    </section>
+                </main>
+            }
+        >
+            <SuccessContent />
+        </Suspense>
     );
 }
