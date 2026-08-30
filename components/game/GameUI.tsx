@@ -101,9 +101,9 @@ export default function GameUI({
                 className="game-secondary-action game-character-action"
               >
                 {environmentTheme === "dynamic"
-                  ? "🔄 &nbsp; ENV: DYNAMIC (EVERY 2000 PTS)"
+                  ? "🔄 DYNAMIC ENV"
                   : environmentTheme === "green"
-                    ? "🌲 GREEN FIELDS"
+                    ? "🌲 GREEN FIELD"
                     : "🏙️ CITY STREET"}
               </button>
             )}
