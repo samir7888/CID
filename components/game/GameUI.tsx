@@ -86,7 +86,7 @@ export default function GameUI({
             <button
               id="did-play-btn"
               onClick={onPlay}
-              className="game-primary-action"
+              className="game-primary-action w-full"
             >
               ▶ &nbsp; PLAY
             </button>
@@ -98,7 +98,7 @@ export default function GameUI({
                 type="button"
                 id="did-theme-btn"
                 onClick={onToggleTheme}
-                className="game-secondary-action game-character-action"
+                className="game-secondary-action game-character-action w-full"
               >
                 {environmentTheme === "dynamic"
                   ? "🔄 DYNAMIC ENV"
