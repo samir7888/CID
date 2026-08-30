@@ -16,7 +16,7 @@ import { getWorldSpeed } from "@/lib/game/difficulty";
 import Player from "./Player";
 import Chaser from "./Chaser";
 import Road from "./Road";
-import Environment from "./Environment";
+import Environment, { type EnvironmentTheme } from "./Environment";
 import AudioManager from "./AudioManager";
 
 // ============================================================
@@ -46,6 +46,7 @@ interface SceneManagerProps {
   onScoreTick: (survivalDelta: number, distanceDelta: number) => void;
   characterId: string;
   characterModelUrl: string | null;
+  environmentTheme?: EnvironmentTheme;
 }
 
 export default function SceneManager({
@@ -64,6 +65,7 @@ export default function SceneManager({
   onScoreTick,
   characterId,
   characterModelUrl,
+  environmentTheme = "dynamic",
 }: SceneManagerProps) {
   const { camera } = useThree();
 
@@ -156,7 +158,13 @@ export default function SceneManager({
 
   return (
     <>
-      <Environment isMobile={isMobile} />
+      <Environment
+        theme={environmentTheme}
+        isMobile={isMobile}
+        active={isPlaying}
+        score={scoreTotal}
+        timescale={timescaleRef.current}
+      />
 
       <Road
         active={isPlaying}

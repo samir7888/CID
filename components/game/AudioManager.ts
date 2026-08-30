@@ -23,7 +23,7 @@ let duringPlayingActive = false;
 
 const SOUND_PATHS: Record<SoundId, string[]> = {
   coin: ["/sounds/collecting-coin/chodu-cid-chut.mp3"],
-  jump: ["/sounds/during-playing/chodu-cid-ek-baar.mp3"],
+  jump: ["/sounds/when-jump/behenklode.mp3"],
   land: ["/sounds/during-playing/chodu-cid-jhaat.mp3"],
   collision: ["/sounds/after-caught/chodu-cid-rapta.mp3"],
   footstep: ["/sounds/during-playing/chodu-cid-pakad-le.mp3"],

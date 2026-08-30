@@ -13,6 +13,7 @@ import MobileControls from "./MobileControls";
 import AudioManager from "./AudioManager";
 import { CHARACTER_STORAGE_KEY, DEFAULT_CHARACTER_ID, getCharacter } from "@/lib/game/characters";
 import { useUser } from "@clerk/nextjs";
+import type { EnvironmentTheme } from "./Environment";
 
 // ============================================================
 // Game — top-level component.
@@ -42,12 +43,19 @@ export default function Game() {
   );
   const [characterModelUrl, setCharacterModelUrl] = useState<string | null>(null);
   const [pinkCoinBalance, setPinkCoinBalance] = useState<number | null>(null);
+  const [environmentTheme, setEnvironmentTheme] = useState<EnvironmentTheme>(() =>
+    typeof window !== "undefined"
+      ? (localStorage.getItem("cid-environment-theme") as EnvironmentTheme) || "dynamic"
+      : "dynamic",
+  );
   const [gameState, setGameState] = useState<GameState>("MENU");
   const [score, setScore] = useState<ScoreState>(() => ({
     ...INITIAL_SCORE,
     best: typeof window !== "undefined" ? parseInt(localStorage.getItem("did-best-score") ?? "0", 10) : 0,
   }));
   const [countdown, setCountdown] = useState(3);
+  const [isReviving, setIsReviving] = useState(false);
+  const [showInsufficientCoins, setShowInsufficientCoins] = useState(false);
   const laneRef = useRef<Lane>(1);
   const jumpRef = useRef(false);
   const slideRef = useRef(false);
@@ -255,8 +263,103 @@ export default function Game() {
     });
   }, []);
 
-  const handleRestart = useCallback(() => { AudioManager.stopAll(); startGame(); }, [startGame]);
-  const handleMainMenu = useCallback(() => { AudioManager.stopAll(); setGameState("MENU"); }, []);
+  const handleRestart = useCallback(() => {
+    setShowInsufficientCoins(false);
+    AudioManager.stopAll();
+    startGame();
+  }, [startGame]);
+
+  const handleMainMenu = useCallback(() => {
+    setShowInsufficientCoins(false);
+    AudioManager.stopAll();
+    setGameState("MENU");
+  }, []);
+
+  const handleContinue = useCallback(async () => {
+    if (isReviving) return;
+
+    if (!isLoaded || !isSignedIn) {
+      setShowInsufficientCoins(true);
+      return;
+    }
+
+    if (pinkCoinBalance !== null && pinkCoinBalance < 2) {
+      setShowInsufficientCoins(true);
+      return;
+    }
+
+    setIsReviving(true);
+    try {
+      const response = await fetch("/api/continue-run", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response.status === 402 || response.status === 401) {
+        setShowInsufficientCoins(true);
+        return;
+      }
+
+      if (!response.ok) {
+        toast.error("Unable to continue run. Please try again.");
+        return;
+      }
+
+      const data = await response.json();
+      if (typeof data.newBalance === "number") {
+        setPinkCoinBalance(data.newBalance);
+      } else {
+        setPinkCoinBalance((prev) => Math.max(0, (prev ?? 2) - 2));
+      }
+
+      setShowInsufficientCoins(false);
+      AudioManager.stopAll();
+
+      isDeadRef.current = false;
+      playerHitRef.current = false;
+      setPlayerHit(false);
+      chaseActiveRef.current = false;
+      chasedObstacleIdRef.current = null;
+      if (chaseTimerRef.current) clearTimeout(chaseTimerRef.current);
+      jumpRef.current = false;
+      slideRef.current = false;
+
+      setGameState("COUNTDOWN");
+      setCountdown(3);
+      let remaining = 3;
+      const interval = setInterval(() => {
+        remaining -= 1;
+        setCountdown(remaining);
+        if (remaining <= 0) {
+          clearInterval(interval);
+          isDeadRef.current = false;
+          playerHitRef.current = false;
+          setPlayerHit(false);
+          chaseActiveRef.current = false;
+          chasedObstacleIdRef.current = null;
+          if (chaseTimerRef.current) clearTimeout(chaseTimerRef.current);
+          jumpRef.current = false;
+          slideRef.current = false;
+          setGameState("PLAYING");
+          AudioManager.playSound("musicLoop");
+        }
+      }, 1000);
+    } catch {
+      toast.error("Failed to continue run. Please check your connection.");
+    } finally {
+      setIsReviving(false);
+    }
+  }, [isLoaded, isSignedIn, pinkCoinBalance, isReviving]);
+
+  const handleToggleTheme = useCallback(() => {
+    setEnvironmentTheme((prev) => {
+      const next: EnvironmentTheme =
+        prev === "dynamic" ? "green" : prev === "green" ? "city" : "dynamic";
+      localStorage.setItem("cid-environment-theme", next);
+      return next;
+    });
+  }, []);
+
   const isPlaying = gameState === "PLAYING";
 
   return (
@@ -271,19 +374,27 @@ export default function Game() {
         }}
         shadows={isMobile ? false : { type: THREE.PCFShadowMap }}
         gl={{ antialias: false, powerPreference: "low-power" }}
-        style={{ position: "absolute", inset: 0, background: "#1a1a2e" }}
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "#09090b",
+        }}
       >
-        <ambientLight intensity={0.9} />
+        <color attach="background" args={["#122615"]} />
+        <fog attach="fog" args={["#162e19", 35, 185]} />
+        <ambientLight intensity={1.15} color="#f0fdf4" />
         <directionalLight
-          position={[5, 12, 5]}
-          intensity={1.8}
+          position={[6, 14, 6]}
+          intensity={2.1}
+          color="#fff9e6"
           castShadow={!isMobile}
           shadow-mapSize={isMobile ? [256, 256] : [512, 512]}
         />
-        <directionalLight position={[-4, 8, -10]} intensity={0.5} color="#8090ff" />
-
-        {/* Fog for depth */}
-        <fog attach="fog" args={["#1a1a2e", 30, 180]} />
+        <directionalLight
+          position={[-4, 8, -10]}
+          intensity={0.6}
+          color="#81c784"
+        />
 
         {/* Scene */}
         <SceneManager
@@ -302,6 +413,7 @@ export default function Game() {
           onScoreTick={handleScoreTick}
           characterId={characterId}
           characterModelUrl={characterModelUrl}
+          environmentTheme={environmentTheme}
         />
       </Canvas>
 
@@ -312,8 +424,14 @@ export default function Game() {
         onPlay={startGame}
         onRestart={handleRestart}
         onMainMenu={handleMainMenu}
+        onContinue={handleContinue}
         countdown={countdown}
         pinkCoinBalance={pinkCoinBalance}
+        isReviving={isReviving}
+        showInsufficientCoins={showInsufficientCoins}
+        onCloseInsufficientCoins={() => setShowInsufficientCoins(false)}
+        environmentTheme={environmentTheme}
+        onToggleTheme={handleToggleTheme}
       />
 
       <Toaster

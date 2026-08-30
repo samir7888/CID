@@ -1,16 +1,145 @@
 "use client";
 
+import { useMemo, useRef } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
+import * as THREE from "three";
+import GreenEnvironment from "./GreenEnvironment";
+
 // ============================================================
-// Low-poly Indian street environment: buildings on both sides,
-// streetlight poles, a gradient sky dome.
-// All placeholder geometry — swap for GLTF models later.
+// Environment Controller:
+// Supports "dynamic" (smoothly alternates between Green Fields &
+// City Street every 2000 score points) as well as fixed "green" and "city".
+// Smoothly cross-fades scenery, Three.js fog, and background colors.
 // ============================================================
 
-export default function Environment({ isMobile = false }: { isMobile?: boolean }) {
+export type EnvironmentTheme = "dynamic" | "green" | "city";
+
+interface EnvironmentProps {
+  theme?: EnvironmentTheme;
+  isMobile?: boolean;
+  active?: boolean;
+  score?: number;
+  timescale?: number;
+}
+
+export function getActiveThemeForScore(
+  score: number,
+  baseTheme: EnvironmentTheme = "dynamic",
+): "green" | "city" {
+  if (baseTheme === "green") return "green";
+  if (baseTheme === "city") return "city";
+
+  // Dynamic mode: Alternates every 2000 score points
+  // 0 - 1999: Green Fields
+  // 2000 - 3999: City Street
+  // 4000 - 5999: Green Fields
+  // 6000 - 7999: City Street ...
+  const cycle = Math.floor(score / 2000);
+  return cycle % 2 === 0 ? "green" : "city";
+}
+
+export default function Environment({
+  theme = "dynamic",
+  isMobile = false,
+  active = true,
+  score = 0,
+  timescale = 1,
+}: EnvironmentProps) {
+  // 1 = 100% Green Fields, 0 = 100% City Street
+  const greenWeightRef = useRef(theme === "city" ? 0 : 1);
+
+  useFrame(() => {
+    const targetTheme = getActiveThemeForScore(score, theme);
+    const targetWeight = targetTheme === "green" ? 1 : 0;
+
+    // Smooth continuous lerp (approx 1.5s visual blend)
+    greenWeightRef.current = THREE.MathUtils.lerp(
+      greenWeightRef.current,
+      targetWeight,
+      0.035,
+    );
+  });
+
+  const greenWeight = greenWeightRef.current;
+  const cityWeight = 1 - greenWeight;
+
   return (
-    <group>
-      {/* Sky / fog color is handled by the Canvas fog prop in Game.tsx */}
+    <>
+      {/* Dynamic atmospheric color controller for Fog & Scene Background */}
+      <AtmosphereController greenWeight={greenWeight} />
 
+      {/* Green Fields Environment */}
+      {greenWeight > 0.005 && (
+        <GreenEnvironment
+          isMobile={isMobile}
+          active={active}
+          score={score}
+          timescale={timescale}
+          weight={greenWeight}
+        />
+      )}
+
+      {/* City / Street Environment */}
+      {cityWeight > 0.005 && (
+        <CityEnvironment
+          isMobile={isMobile}
+          weight={cityWeight}
+        />
+      )}
+    </>
+  );
+}
+
+// ============================================================
+// Atmosphere Controller: Smoothly interpolates WebGL Background & Fog
+// ============================================================
+
+function AtmosphereController({ greenWeight }: { greenWeight: number }) {
+  const { scene } = useThree();
+
+  const greenBg = useMemo(() => new THREE.Color("#122615"), []);
+  const cityBg = useMemo(() => new THREE.Color("#1a1a2e"), []);
+  const greenFog = useMemo(() => new THREE.Color("#162e19"), []);
+  const cityFog = useMemo(() => new THREE.Color("#1a1a2e"), []);
+
+  const currentBg = useRef(new THREE.Color("#122615"));
+  const currentFog = useRef(new THREE.Color("#162e19"));
+
+  useFrame(() => {
+    const targetBg = cityBg.clone().lerp(greenBg, greenWeight);
+    const targetFog = cityFog.clone().lerp(greenFog, greenWeight);
+
+    currentBg.current.lerp(targetBg, 0.05);
+    currentFog.current.lerp(targetFog, 0.05);
+
+    if (scene.fog) {
+      scene.fog.color.copy(currentFog.current);
+    }
+    if (scene.background && scene.background instanceof THREE.Color) {
+      scene.background.copy(currentBg.current);
+    }
+  });
+
+  return null;
+}
+
+// ============================================================
+// City / Urban Environment with Smooth Vertical Rise / Sink Transition
+// ============================================================
+
+interface CityEnvironmentProps {
+  isMobile?: boolean;
+  weight?: number;
+}
+
+function CityEnvironment({ isMobile = false, weight = 1 }: CityEnvironmentProps) {
+  const safeWeight = Math.max(0, Math.min(1, weight));
+
+  return (
+    <group
+      position={[0, (1 - safeWeight) * -14, 0]}
+      scale={[1, THREE.MathUtils.lerp(0.1, 1, safeWeight), 1]}
+    >
       {/* Ground plane extending far ahead */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.02, -100]} receiveShadow>
         <planeGeometry args={[60, 250]} />
@@ -76,7 +205,7 @@ export default function Environment({ isMobile = false }: { isMobile?: boolean }
   );
 }
 
-// ---- Static scene data ----
+// ---- Static city scene data ----
 
 const BUILDING_COLORS = [
   "#c4a882", "#d4956a", "#b8c4a0", "#a0b4c0",

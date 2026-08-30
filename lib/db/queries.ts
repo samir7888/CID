@@ -144,6 +144,38 @@ export async function unlockCharacter(
   });
 }
 
+export type DeductResult = "success" | "insufficient";
+
+export async function deductPinkCoins(
+  db: AppDatabase,
+  userId: string,
+  amount: number,
+): Promise<{ result: DeductResult; newBalance?: number }> {
+  return db.transaction(async (tx: AppDatabase) => {
+    await ensureProfile(tx, userId);
+    const updated = await tx
+      .update(profiles)
+      .set({
+        pinkCoinBalance: sql`${profiles.pinkCoinBalance} - ${amount}`,
+      })
+      .where(
+        and(
+          eq(profiles.id, userId),
+          sql`${profiles.pinkCoinBalance} >= ${amount}`,
+        ),
+      )
+      .returning({ id: profiles.id, pinkCoinBalance: profiles.pinkCoinBalance });
+
+    if (updated.length === 0) {
+      return { result: "insufficient" as const };
+    }
+    return {
+      result: "success" as const,
+      newBalance: updated[0].pinkCoinBalance,
+    };
+  });
+}
+
 export async function selectCharacter(
   db: AppDatabase,
   userId: string,

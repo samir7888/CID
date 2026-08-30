@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { GameState, ScoreState } from "@/lib/game/types";
+import type { EnvironmentTheme } from "./Environment";
 
 // ============================================================
 // All in-game HTML overlays — pure React, not Three.js text.
@@ -16,8 +18,14 @@ interface GameUIProps {
   onPlay: () => void;
   onRestart: () => void;
   onMainMenu: () => void;
+  onContinue: () => void;
   countdown: number; // 3..1..0 → game starts
   pinkCoinBalance: number | null;
+  isReviving?: boolean;
+  showInsufficientCoins: boolean;
+  onCloseInsufficientCoins: () => void;
+  environmentTheme?: EnvironmentTheme;
+  onToggleTheme?: () => void;
 }
 
 export default function GameUI({
@@ -26,9 +34,16 @@ export default function GameUI({
   onPlay,
   onRestart,
   onMainMenu,
+  onContinue,
   countdown,
   pinkCoinBalance,
+  isReviving = false,
+  showInsufficientCoins,
+  onCloseInsufficientCoins,
+  environmentTheme = "dynamic",
+  onToggleTheme,
 }: GameUIProps) {
+  const router = useRouter();
   const [showTutorial, setShowTutorial] = useState(false);
 
   useEffect(() => {
@@ -78,6 +93,20 @@ export default function GameUI({
             <Link href="/character" className="game-secondary-action game-character-action">
               ◇ &nbsp; CHOOSE CHARACTER
             </Link>
+            {onToggleTheme && (
+              <button
+                type="button"
+                id="did-theme-btn"
+                onClick={onToggleTheme}
+                className="game-secondary-action game-character-action"
+              >
+                {environmentTheme === "dynamic"
+                  ? "🔄 &nbsp; ENV: DYNAMIC (EVERY 2000 PTS)"
+                  : environmentTheme === "green"
+                    ? "🌲 GREEN FIELDS"
+                    : "🏙️ CITY STREET"}
+              </button>
+            )}
         
 
             {/* Best score */}
@@ -164,28 +193,90 @@ export default function GameUI({
               <ScoreLine label="Score" value={score.total.toLocaleString()} color="text-white" />
               <ScoreLine label="Chuts" value={`◆ ${score.coinsCollected}`} color="text-amber-400" />
               <ScoreLine label="Distance" value={`${Math.floor(score.distanceScore)} m`} color="text-cyan-300" />
+              <ScoreLine
+                label="Pink Chuts"
+                value={`◆ ${pinkCoinBalance === null ? 0 : pinkCoinBalance.toLocaleString()}`}
+                color="text-pink-400"
+              />
               <div className="h-px bg-zinc-700/50 my-3" />
               <ScoreLine label="Best" value={score.best.toLocaleString()} color="text-amber-300" />
             </div>
 
             {/* Buttons */}
-            <div className="game-actions">
+            <div className="game-over-actions">
               <button
-                id="did-play-again-btn"
-                onClick={onRestart}
-                className="game-primary-action"
+                id="did-continue-btn"
+                onClick={onContinue}
+                disabled={isReviving}
+                className="game-continue-action"
               >
-                ▶ &nbsp; PLAY AGAIN
+                {isReviving ? (
+                  "REVIVING..."
+                ) : (
+                  <span className="flex items-center justify-center gap-2">
+                    <span>⚡ CONTINUE</span>
+                    <span className="game-continue-cost">2 ◆</span>
+                  </span>
+                )}
               </button>
-              <button
-                id="did-menu-btn"
-                onClick={onMainMenu}
-                className="game-secondary-action"
-              >
-                MAIN MENU
-              </button>
+
+              <div className="game-over-secondary-row">
+                <button
+                  id="did-play-again-btn"
+                  onClick={onRestart}
+                  className="game-primary-action"
+                >
+                  ▶ &nbsp; PLAY AGAIN
+                </button>
+                <button
+                  id="did-menu-btn"
+                  onClick={onMainMenu}
+                  className="game-secondary-action"
+                >
+                  MAIN MENU
+                </button>
+              </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* ── INSUFFICIENT PINK COINS MODAL ── */}
+      {showInsufficientCoins && (
+        <div
+          className="character-modal-backdrop pointer-events-auto"
+          role="presentation"
+          onClick={onCloseInsufficientCoins}
+        >
+          <section
+            className="character-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="insufficient-coins-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="game-kicker character-modal-kicker">ACCESS DENIED</div>
+            <h2 id="insufficient-coins-title" className="character-modal-title">
+              INSUFFICIENT PINK CHUTS
+            </h2>
+            <p className="character-modal-copy">
+              You need 2 Pink Chuts to continue this run.
+            </p>
+            <div className="character-modal-actions">
+              <button
+                className="game-primary-action"
+                onClick={() => router.push("/pink-coins")}
+              >
+                BUY PINK CHUTS
+              </button>
+              <button
+                className="game-secondary-action"
+                onClick={onCloseInsufficientCoins}
+              >
+                CLOSE
+              </button>
+            </div>
+          </section>
         </div>
       )}
     </div>

@@ -65,6 +65,12 @@
       "namedRegex": "^/api/checkout(?:/)?$"
     },
     {
+      "page": "/api/continue-run",
+      "regex": "^/api/continue\\-run(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/continue\\-run(?:/)?$"
+    },
+    {
       "page": "/api/packages",
       "regex": "^/api/packages(?:/)?$",
       "routeKeys": {},
@@ -101,16 +107,46 @@
       "namedRegex": "^/api/webhooks/dodo(?:/)?$"
     },
     {
+      "page": "/apple-icon.png",
+      "regex": "^/apple\\-icon\\.png(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/apple\\-icon\\.png(?:/)?$"
+    },
+    {
       "page": "/character",
       "regex": "^/character(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/character(?:/)?$"
     },
     {
+      "page": "/failure",
+      "regex": "^/failure(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/failure(?:/)?$"
+    },
+    {
+      "page": "/favicon.ico",
+      "regex": "^/favicon\\.ico(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/favicon\\.ico(?:/)?$"
+    },
+    {
       "page": "/game",
       "regex": "^/game(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/game(?:/)?$"
+    },
+    {
+      "page": "/icon.png",
+      "regex": "^/icon\\.png(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/icon\\.png(?:/)?$"
+    },
+    {
+      "page": "/manifest.webmanifest",
+      "regex": "^/manifest\\.webmanifest(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/manifest\\.webmanifest(?:/)?$"
     },
     {
       "page": "/pink-coins",

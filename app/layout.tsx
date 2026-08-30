@@ -7,6 +7,13 @@ export const metadata: Metadata = {
   description:
     "Run! ACP Pradyuman is chasing you down a chaotic Indian street. Dodge obstacles, collect chuts, and survive as long as you can.",
   keywords: ["game", "endless runner", "3D", "detective", "Indian street"],
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png", sizes: "32x32" },
+    ],
+    apple: "/apple-icon.png",
+  },
 };
 
 export default function RootLayout({

@@ -6,6 +6,7 @@ import * as schema from "./schema";
 import { pinkCoinPackages, profiles } from "./schema";
 import {
   completeCoinOrder,
+  deductPinkCoins,
   ensureProfile,
   getProfile,
   selectCharacter,
@@ -140,5 +141,33 @@ describe("drizzle game queries", () => {
 
     const profile = await getProfile(db, "user_clerk_6");
     expect(profile.pink_coin_balance).toBe(100);
+  });
+
+  it("deducts pink coins successfully when balance is sufficient", async () => {
+    await ensureProfile(db, "user_clerk_7");
+    await db
+      .update(profiles)
+      .set({ pinkCoinBalance: 5 })
+      .where(eq(profiles.id, "user_clerk_7"));
+
+    const result = await deductPinkCoins(db, "user_clerk_7", 2);
+    expect(result).toEqual({ result: "success", newBalance: 3 });
+
+    const profile = await getProfile(db, "user_clerk_7");
+    expect(profile.pink_coin_balance).toBe(3);
+  });
+
+  it("fails to deduct pink coins when balance is insufficient", async () => {
+    await ensureProfile(db, "user_clerk_8");
+    await db
+      .update(profiles)
+      .set({ pinkCoinBalance: 1 })
+      .where(eq(profiles.id, "user_clerk_8"));
+
+    const result = await deductPinkCoins(db, "user_clerk_8", 2);
+    expect(result).toEqual({ result: "insufficient" });
+
+    const profile = await getProfile(db, "user_clerk_8");
+    expect(profile.pink_coin_balance).toBe(1);
   });
 });
