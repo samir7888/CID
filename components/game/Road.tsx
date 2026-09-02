@@ -195,7 +195,8 @@ export default function Road({
       // Recycle chunk that has scrolled past camera
       if (chunk.z - ROAD_CHUNK_LENGTH > ROAD_RECYCLE_Z) {
         // Find the furthest-back chunk
-        const minZ = Math.min(...chunks.current.map((c) => c.z));
+        let minZ = Infinity;
+        for (const c of chunks.current) if (c.z < minZ) minZ = c.z;
         chunk.z = minZ - ROAD_CHUNK_LENGTH;
 
         const newObstacles = spawnObstaclesForChunk(chunk.z, score, difficultyStep);
@@ -209,12 +210,19 @@ export default function Road({
     // --- Collision checks ---
     if (!playerState.isDead) {
       // Convert local chunk coordinates into world coordinates for collision.
-      const allObs = chunks.current.flatMap((chunk) =>
-        chunk.obstacles.map((obstacle) => ({ ...obstacle, z: chunk.z + obstacle.z }))
-      );
-      const allCoins = chunks.current.flatMap((chunk) =>
-        chunk.coins.map((coin) => ({ ...coin, z: chunk.z + coin.z }))
-      );
+      // Only obstacles/coins near the player matter (z in [-20, 10]).
+      const allObs = [],
+        allCoins = [];
+      for (const chunk of chunks.current) {
+        for (const obstacle of chunk.obstacles) {
+          const oz = chunk.z + obstacle.z;
+          if (oz > -20 && oz < 10) allObs.push({ ...obstacle, z: oz });
+        }
+        for (const coin of chunk.coins) {
+          const cz = chunk.z + coin.z;
+          if (cz > -20 && cz < 10) allCoins.push({ ...coin, z: cz });
+        }
+      }
 
       const hit = checkObstacleCollision(playerState, allObs);
       if (!hit) lastCollidedObstacleId.current = null;

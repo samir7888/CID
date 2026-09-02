@@ -7,12 +7,11 @@ import GreenEnvironment from "./GreenEnvironment";
 
 // ============================================================
 // Environment Controller:
-// Supports "dynamic" (smoothly alternates between Green Fields &
-// City Street every 2000 score points) as well as fixed "green" and "city".
+// Supports "green" (Green Fields) and "city" (City/Street).
 // Smoothly cross-fades scenery, Three.js fog, and background colors.
 // ============================================================
 
-export type EnvironmentTheme = "dynamic" | "green" | "city";
+export type EnvironmentTheme = "green" | "city";
 
 interface EnvironmentProps {
   theme?: EnvironmentTheme;
@@ -24,22 +23,14 @@ interface EnvironmentProps {
 
 export function getActiveThemeForScore(
   score: number,
-  baseTheme: EnvironmentTheme = "dynamic",
+  baseTheme: EnvironmentTheme = "green",
 ): "green" | "city" {
   if (baseTheme === "green") return "green";
-  if (baseTheme === "city") return "city";
-
-  // Dynamic mode: Alternates every 2000 score points
-  // 0 - 1999: Green Fields
-  // 2000 - 3999: City Street
-  // 4000 - 5999: Green Fields
-  // 6000 - 7999: City Street ...
-  const cycle = Math.floor(score / 2000);
-  return cycle % 2 === 0 ? "green" : "city";
+  return "city";
 }
 
 export default function Environment({
-  theme = "dynamic",
+  theme = "green",
   isMobile = false,
   active = true,
   score = 0,
@@ -158,7 +149,7 @@ function CityEnvironment({ isMobile = false, weight = 1 }: CityEnvironmentProps)
 
       {/* Buildings — left side */}
       {BUILDING_DATA_LEFT.map((b) => (
-        <mesh key={b.key} position={b.pos} castShadow receiveShadow>
+        <mesh key={b.key} position={b.pos} receiveShadow>
           <boxGeometry args={b.size} />
           <meshStandardMaterial color={b.color} />
         </mesh>
@@ -166,14 +157,14 @@ function CityEnvironment({ isMobile = false, weight = 1 }: CityEnvironmentProps)
 
       {/* Buildings — right side */}
       {BUILDING_DATA_RIGHT.map((b) => (
-        <mesh key={b.key} position={b.pos} castShadow receiveShadow>
+        <mesh key={b.key} position={b.pos} receiveShadow>
           <boxGeometry args={b.size} />
           <meshStandardMaterial color={b.color} />
         </mesh>
       ))}
 
       {/* Streetlight poles — left */}
-      {POLE_ZS.filter((_, index) => !isMobile || index % 2 === 0).map((z) => (
+      {POLE_ZS.filter((_, index) => !isMobile ? index % 2 === 0 : index % 4 === 0).map((z) => (
         <group key={`pl${z}`} position={[-5.5, 0, z]}>
           <mesh position={[0, 2, 0]}>
             <cylinderGeometry args={[0.08, 0.08, 4, 6]} />
@@ -183,12 +174,12 @@ function CityEnvironment({ isMobile = false, weight = 1 }: CityEnvironmentProps)
             <boxGeometry args={[0.8, 0.15, 0.15]} />
             <meshStandardMaterial color="#555" />
           </mesh>
-          <pointLight position={[0.4, 3.6, 0]} intensity={isMobile ? 3 : 6} distance={12} color="#ffe8a0" />
+          <pointLight position={[0.4, 3.6, 0]} intensity={isMobile ? 2 : 4} distance={10} color="#ffe8a0" />
         </group>
       ))}
 
       {/* Streetlight poles — right */}
-      {POLE_ZS.filter((_, index) => !isMobile || index % 2 === 0).map((z) => (
+      {POLE_ZS.filter((_, index) => !isMobile ? index % 2 === 0 : index % 4 === 0).map((z) => (
         <group key={`pr${z}`} position={[5.5, 0, z]}>
           <mesh position={[0, 2, 0]}>
             <cylinderGeometry args={[0.08, 0.08, 4, 6]} />
@@ -198,7 +189,7 @@ function CityEnvironment({ isMobile = false, weight = 1 }: CityEnvironmentProps)
             <boxGeometry args={[0.8, 0.15, 0.15]} />
             <meshStandardMaterial color="#555" />
           </mesh>
-          <pointLight position={[-0.4, 3.6, 0]} intensity={isMobile ? 3 : 6} distance={12} color="#ffe8a0" />
+          <pointLight position={[-0.4, 3.6, 0]} intensity={isMobile ? 2 : 4} distance={10} color="#ffe8a0" />
         </group>
       ))}
     </group>

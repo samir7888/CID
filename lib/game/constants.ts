@@ -22,7 +22,7 @@ export const JUMP_DURATION = 0.65; // seconds, full arc up+down
 export const SLIDE_DURATION = 0.7; // seconds
 
 // --- World speed / forward motion ---
-export const BASE_WORLD_SPEED = 16; // units/sec the world moves toward player
+export const BASE_WORLD_SPEED = 22; // units/sec the world moves toward player
 export const MAX_WORLD_SPEED = 80;
 export const SPEED_RAMP_PER_SCORE = 2.419; // how fast speed climbs with score
 export const SPEED_STEP_INTERVAL = 5; // seconds between timed difficulty increases

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import {
@@ -266,7 +266,7 @@ function ImportedCharacter({
   isDead: boolean;
 }) {
   const { scene } = useGLTF(path);
-  const model = SkeletonUtils.clone(scene);
+  const model = useMemo(() => SkeletonUtils.clone(scene), [scene]);
 
   return (
     <primitive

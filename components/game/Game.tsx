@@ -43,11 +43,11 @@ export default function Game() {
   );
   const [characterModelUrl, setCharacterModelUrl] = useState<string | null>(null);
   const [pinkCoinBalance, setPinkCoinBalance] = useState<number | null>(null);
-  const [environmentTheme, setEnvironmentTheme] = useState<EnvironmentTheme>(() =>
-    typeof window !== "undefined"
-      ? (localStorage.getItem("cid-environment-theme") as EnvironmentTheme) || "dynamic"
-      : "dynamic",
-  );
+  const [environmentTheme, setEnvironmentTheme] = useState<EnvironmentTheme>(() => {
+    if (typeof window === "undefined") return "green";
+    const stored = localStorage.getItem("cid-environment-theme");
+    return stored === "city" ? "city" : "green";
+  });
   const [gameState, setGameState] = useState<GameState>("MENU");
   const [score, setScore] = useState<ScoreState>(() => ({
     ...INITIAL_SCORE,
@@ -56,6 +56,7 @@ export default function Game() {
   const [countdown, setCountdown] = useState(3);
   const [isReviving, setIsReviving] = useState(false);
   const [showInsufficientCoins, setShowInsufficientCoins] = useState(false);
+  const [rendererKey, setRendererKey] = useState(0);
   const laneRef = useRef<Lane>(1);
   const jumpRef = useRef(false);
   const slideRef = useRef(false);
@@ -353,8 +354,7 @@ export default function Game() {
 
   const handleToggleTheme = useCallback(() => {
     setEnvironmentTheme((prev) => {
-      const next: EnvironmentTheme =
-        prev === "dynamic" ? "green" : prev === "green" ? "city" : "dynamic";
+      const next: EnvironmentTheme = prev === "green" ? "city" : "green";
       localStorage.setItem("cid-environment-theme", next);
       return next;
     });
@@ -362,9 +362,23 @@ export default function Game() {
 
   const isPlaying = gameState === "PLAYING";
 
+  const handleCanvasCreated = useCallback(
+    (state: { gl: THREE.WebGLRenderer }) => {
+      const canvas = state.gl.domElement;
+      const onContextLost = (event: Event) => {
+        event.preventDefault();
+        setRendererKey((prev) => prev + 1);
+      };
+      canvas.addEventListener("webglcontextlost", onContextLost, false);
+    },
+    [],
+  );
+
   return (
     <div className="relative w-full h-full bg-zinc-950">
       <Canvas
+        key={rendererKey}
+        onCreated={handleCanvasCreated}
         dpr={isMobile ? 1 : MAX_DPR}
         camera={{
           position: [CAMERA_OFFSET.x, CAMERA_OFFSET.y, CAMERA_OFFSET.z],

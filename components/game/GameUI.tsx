@@ -40,7 +40,7 @@ export default function GameUI({
   isReviving = false,
   showInsufficientCoins,
   onCloseInsufficientCoins,
-  environmentTheme = "dynamic",
+  environmentTheme = "green",
   onToggleTheme,
 }: GameUIProps) {
   const router = useRouter();
@@ -100,11 +100,9 @@ export default function GameUI({
                 onClick={onToggleTheme}
                 className="game-secondary-action game-character-action w-full"
               >
-                {environmentTheme === "dynamic"
-                  ? "🔄 DYNAMIC ENV"
-                  : environmentTheme === "green"
-                    ? "🌲 GREEN FIELD"
-                    : "🏙️ CITY STREET"}
+                {environmentTheme === "green"
+                  ? "🌲 GREEN FIELD"
+                  : "🏙️ CITY STREET"}
               </button>
             )}
         

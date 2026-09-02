@@ -42,7 +42,7 @@ export default function GreenEnvironment({
       const seed = segIdx * 137.5;
 
       // Left & Right trees
-      const treeCountPerSide = isMobile ? 3 : 5;
+      const treeCountPerSide = isMobile ? 2 : 3;
       const leftTrees = Array.from({ length: treeCountPerSide }, (_, i) => {
         const localZ = -(i * (SEGMENT_LENGTH / treeCountPerSide) + ((seed * (i + 1)) % 3));
         const xDist = 7.5 + ((seed * (i + 3)) % 18);
@@ -60,10 +60,10 @@ export default function GreenEnvironment({
       });
 
       // Roadside wooden fences (left & right)
-      const fencePosts = Array.from({ length: Math.floor(SEGMENT_LENGTH / 4) }, (_, i) => -(i * 4));
+      const fencePosts = Array.from({ length: Math.floor(SEGMENT_LENGTH / 5) }, (_, i) => -(i * 5));
 
       // Rocks and bushes
-      const rockCount = isMobile ? 2 : 4;
+      const rockCount = 2;
       const rocks = Array.from({ length: rockCount }, (_, i) => {
         const side = i % 2 === 0 ? -1 : 1;
         const x = side * (5.5 + ((seed * (i + 4)) % 8));
@@ -72,7 +72,7 @@ export default function GreenEnvironment({
         return { id: `rk-${segIdx}-${i}`, x, z, scale };
       });
 
-      const bushCount = isMobile ? 2 : 5;
+      const bushCount = isMobile ? 2 : 3;
       const bushes = Array.from({ length: bushCount }, (_, i) => {
         const side = i % 2 === 0 ? -1 : 1;
         const x = side * (5.8 + ((seed * (i + 8)) % 12));
@@ -152,15 +152,15 @@ export default function GreenEnvironment({
 
       {/* Distant soft green hills on the horizon */}
       <mesh position={[-45, 12, -180]} scale={[40, 24, 20]}>
-        <sphereGeometry args={[1, 16, 12]} />
+        <sphereGeometry args={[1, 12, 8]} />
         <meshStandardMaterial color="#1a3b1d" roughness={1} />
       </mesh>
       <mesh position={[45, 14, -190]} scale={[46, 28, 22]}>
-        <sphereGeometry args={[1, 16, 12]} />
+        <sphereGeometry args={[1, 12, 8]} />
         <meshStandardMaterial color="#18361b" roughness={1} />
       </mesh>
       <mesh position={[0, 8, -210]} scale={[60, 20, 25]}>
-        <sphereGeometry args={[1, 16, 12]} />
+        <sphereGeometry args={[1, 12, 8]} />
         <meshStandardMaterial color="#142c16" roughness={1} />
       </mesh>
 
@@ -209,10 +209,10 @@ export default function GreenEnvironment({
             />
           ))}
 
-          {/* Boulders / Rocks */}
+{/* Boulders / Rocks */}
           {seg.rocks.map((rk) => (
-            <mesh key={rk.id} position={[rk.x, 0.25 * rk.scale, rk.z]} scale={rk.scale} castShadow receiveShadow>
-              <dodecahedronGeometry args={[0.75, 1]} />
+            <mesh key={rk.id} position={[rk.x, 0.25 * rk.scale, rk.z]} scale={rk.scale} receiveShadow>
+              <dodecahedronGeometry args={[0.75, 0]} />
               <meshStandardMaterial color="#5e685f" roughness={0.9} />
             </mesh>
           ))}
@@ -249,23 +249,19 @@ function TreeInstance({
     return (
       <group position={[x, 0, z]} scale={scale}>
         {/* Trunk */}
-        <mesh position={[0, 1.1, 0]} castShadow>
-          <cylinderGeometry args={[0.18, 0.32, 2.2, 8]} />
+        <mesh position={[0, 1.1, 0]}>
+          <cylinderGeometry args={[0.18, 0.32, 2.2, 6]} />
           <meshStandardMaterial color="#4a2e1b" roughness={0.9} />
         </mesh>
         {/* Foliage cluster */}
         <group ref={foliageRefCallback} position={[0, 0, 0]}>
-          <mesh position={[0, 2.3, 0]} castShadow>
-            <coneGeometry args={[1.7, 2.0, 8]} />
+          <mesh position={[0, 2.3, 0]}>
+            <coneGeometry args={[1.7, 2.0, 6]} />
             <meshStandardMaterial color="#1e5428" roughness={0.75} />
           </mesh>
-          <mesh position={[0, 3.4, 0]} castShadow>
-            <coneGeometry args={[1.35, 1.8, 8]} />
-            <meshStandardMaterial color="#296b34" roughness={0.75} />
-          </mesh>
-          <mesh position={[0, 4.3, 0]} castShadow>
-            <coneGeometry args={[0.95, 1.5, 8]} />
-            <meshStandardMaterial color="#378244" roughness={0.75} />
+          <mesh position={[0, 3.5, 0]}>
+            <coneGeometry args={[1.2, 1.8, 6]} />
+            <meshStandardMaterial color="#2f733a" roughness={0.75} />
           </mesh>
         </group>
       </group>
@@ -277,29 +273,25 @@ function TreeInstance({
     return (
       <group position={[x, 0, z]} scale={scale}>
         {/* Trunk */}
-        <mesh position={[0, 1.4, 0]} castShadow>
-          <cylinderGeometry args={[0.26, 0.42, 2.8, 8]} />
+        <mesh position={[0, 1.4, 0]}>
+          <cylinderGeometry args={[0.26, 0.42, 2.8, 6]} />
           <meshStandardMaterial color="#543722" roughness={0.88} />
         </mesh>
         {/* Canopy spheres */}
         <group ref={foliageRefCallback} position={[0, 3.6, 0]}>
           {/* Main sphere */}
-          <mesh castShadow>
-            <sphereGeometry args={[1.55, 12, 10]} />
+          <mesh>
+            <sphereGeometry args={[1.55, 10, 8]} />
             <meshStandardMaterial color="#2d7336" roughness={0.8} />
           </mesh>
           {/* Side overlapping canopy clusters */}
-          <mesh position={[0.7, -0.3, 0.4]} scale={0.78} castShadow>
-            <sphereGeometry args={[1.3, 10, 8]} />
+          <mesh position={[0.7, -0.3, 0.4]} scale={0.78}>
+            <sphereGeometry args={[1.3, 8, 6]} />
             <meshStandardMaterial color="#388543" roughness={0.8} />
           </mesh>
-          <mesh position={[-0.6, -0.2, -0.3]} scale={0.82} castShadow>
-            <sphereGeometry args={[1.3, 10, 8]} />
+          <mesh position={[-0.6, -0.2, -0.3]} scale={0.82}>
+            <sphereGeometry args={[1.3, 8, 6]} />
             <meshStandardMaterial color="#25632d" roughness={0.8} />
-          </mesh>
-          <mesh position={[0.1, 0.6, -0.2]} scale={0.68} castShadow>
-            <sphereGeometry args={[1.2, 10, 8]} />
-            <meshStandardMaterial color="#41964d" roughness={0.8} />
           </mesh>
         </group>
       </group>
@@ -310,18 +302,18 @@ function TreeInstance({
   return (
     <group position={[x, 0, z]} scale={scale}>
       {/* Light-colored trunk */}
-      <mesh position={[0, 1.8, 0]} castShadow>
-        <cylinderGeometry args={[0.16, 0.26, 3.6, 8]} />
+      <mesh position={[0, 1.8, 0]}>
+        <cylinderGeometry args={[0.16, 0.26, 3.6, 6]} />
         <meshStandardMaterial color="#ded7cb" roughness={0.7} />
       </mesh>
       {/* Tall slender foliage */}
       <group ref={foliageRefCallback} position={[0, 3.8, 0]}>
-        <mesh scale={[1, 1.6, 1]} castShadow>
-          <sphereGeometry args={[1.15, 12, 10]} />
+        <mesh scale={[1, 1.6, 1]}>
+          <sphereGeometry args={[1.15, 10, 8]} />
           <meshStandardMaterial color="#4ea147" roughness={0.78} />
         </mesh>
-        <mesh position={[0, 0.8, 0]} scale={[0.75, 1.2, 0.75]} castShadow>
-          <sphereGeometry args={[1.0, 10, 8]} />
+        <mesh position={[0, 0.8, 0]} scale={[0.75, 1.2, 0.75]}>
+          <sphereGeometry args={[1.0, 8, 6]} />
           <meshStandardMaterial color="#63b35c" roughness={0.78} />
         </mesh>
       </group>
@@ -336,17 +328,13 @@ function TreeInstance({
 function BushInstance({ x, z, scale }: { x: number; z: number; scale: number }) {
   return (
     <group position={[x, 0, z]} scale={scale}>
-      <mesh position={[0, 0.45, 0]} castShadow receiveShadow>
+      <mesh position={[0, 0.45, 0]} receiveShadow>
         <sphereGeometry args={[0.55, 8, 6]} />
         <meshStandardMaterial color="#357833" roughness={0.85} />
       </mesh>
-      <mesh position={[0.3, 0.35, 0.2]} scale={0.75} castShadow receiveShadow>
-        <sphereGeometry args={[0.5, 8, 6]} />
+      <mesh position={[0.3, 0.35, 0.2]} scale={0.75} receiveShadow>
+        <sphereGeometry args={[0.5, 6, 5]} />
         <meshStandardMaterial color="#448d42" roughness={0.85} />
-      </mesh>
-      <mesh position={[-0.25, 0.35, -0.15]} scale={0.7} castShadow receiveShadow>
-        <sphereGeometry args={[0.5, 8, 6]} />
-        <meshStandardMaterial color="#2d682b" roughness={0.85} />
       </mesh>
     </group>
   );
@@ -362,7 +350,7 @@ function WoodenFence({ posts, xPos }: { posts: number[]; xPos: number }) {
       {posts.map((pz, idx) => (
         <group key={`post-${pz}`}>
           {/* Vertical wooden post */}
-          <mesh position={[0, 0.45, pz]} castShadow receiveShadow>
+          <mesh position={[0, 0.45, pz]} receiveShadow>
             <boxGeometry args={[0.1, 0.9, 0.1]} />
             <meshStandardMaterial color="#593b22" roughness={0.9} />
           </mesh>
@@ -370,12 +358,12 @@ function WoodenFence({ posts, xPos }: { posts: number[]; xPos: number }) {
           {/* Horizontal rails connecting to next post */}
           {idx < posts.length - 1 && (
             <>
-              <mesh position={[0, 0.65, pz - 2]} castShadow receiveShadow>
-                <boxGeometry args={[0.06, 0.08, 4]} />
+              <mesh position={[0, 0.65, pz - 2.5]} receiveShadow>
+                <boxGeometry args={[0.06, 0.08, 5]} />
                 <meshStandardMaterial color="#66462c" roughness={0.9} />
               </mesh>
-              <mesh position={[0, 0.35, pz - 2]} castShadow receiveShadow>
-                <boxGeometry args={[0.06, 0.08, 4]} />
+              <mesh position={[0, 0.35, pz - 2.5]} receiveShadow>
+                <boxGeometry args={[0.06, 0.08, 5]} />
                 <meshStandardMaterial color="#66462c" roughness={0.9} />
               </mesh>
             </>

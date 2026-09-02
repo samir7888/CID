@@ -65,7 +65,7 @@ export default function SceneManager({
   onScoreTick,
   characterId,
   characterModelUrl,
-  environmentTheme = "dynamic",
+  environmentTheme = "green",
 }: SceneManagerProps) {
   const { camera } = useThree();
 
