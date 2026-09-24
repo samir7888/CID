@@ -45,7 +45,7 @@ export const COIN_VALUE = 10;
 
 // --- Difficulty bands (score thresholds) ---
 export const DIFFICULTY_BANDS = [
-  { minScore: 0, label: "easy", speedMultiplier: 1.0, chaserAggression: 0.2 },
+  { minScore: 0, label: "easy", speedMultiplier: 1.4, chaserAggression: 0.25 },
   {
     minScore: 500,
     label: "medium",

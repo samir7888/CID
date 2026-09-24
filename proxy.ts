@@ -1,9 +1,19 @@
-import { clerkMiddleware } from '@clerk/nextjs/server';
+import { clerkMiddleware } from "@clerk/nextjs/server";
+import { NextRequest, NextResponse } from "next/server";
 
-const clerkProxy = clerkMiddleware();
+export default clerkMiddleware((auth, request: NextRequest) => {
+  // Create a response
+  const response = NextResponse.next();
 
-export default clerkProxy;
-export const proxy = clerkProxy;
+  // Force indexing by setting proper X-Robots-Tag header
+  // This will override any noindex headers set by Vercel or other sources
+  response.headers.set("X-Robots-Tag", "index, follow");
+
+  // Remove any potential noindex headers
+  response.headers.delete("X-Robots-Tag-noindex");
+
+  return response;
+});
 
 export const config = {
   matcher: [
