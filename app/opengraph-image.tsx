@@ -166,7 +166,7 @@ export default function OGImage() {
             letterSpacing: '0.05em',
           }}
         >
-          choducid2.vercel.app
+          choducid.basnetsameer.com.np
         </div>
       </div>
     ),

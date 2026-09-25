@@ -5,7 +5,7 @@ import "./globals.css";
 import JsonLd from "@/components/seo/JsonLd";
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://choducid2.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://choducid.basnetsameer.com.np";
 const SITE_NAME = "C.I.D. — Chodu Investigation Department";
 const SITE_DESCRIPTION =
   "Play C.I.D. — the ultimate free browser game where ACP Pradyuman chases you through chaotic Indian streets! Dodge obstacles, collect pink chuts, unlock CID characters and survive as long as you can in this addictive 3D endless runner.";
