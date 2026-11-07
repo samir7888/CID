@@ -65,7 +65,9 @@ export default function GameUI({
           <div className="game-loading-mark">
             <div className="game-kicker">C.I.D. / RUN 01</div>
             <div className="game-loading-title">LOADING</div>
-            <div className="game-loading-bar"><span /></div>
+            <div className="game-loading-bar">
+              <span />
+            </div>
           </div>
         </div>
       )}
@@ -90,7 +92,10 @@ export default function GameUI({
             >
               ▶ &nbsp; PLAY
             </button>
-            <Link href="/character" className="game-secondary-action game-character-action">
+            <Link
+              href="/character"
+              className="game-secondary-action game-character-action"
+            >
               ◇ &nbsp; CHOOSE CHARACTER
             </Link>
             {onToggleTheme && (
@@ -105,12 +110,22 @@ export default function GameUI({
                   : "🏙️ CITY STREET"}
               </button>
             )}
-        
+
+            {/* Support button */}
+            <a
+              href="https://cr8rs.app/therealme/tip"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="game-secondary-action game-character-action w-full pointer-events-auto"
+            >
+              💖 SUPPORT CHODUCID
+            </a>
 
             {/* Best score */}
             {score.best > 0 && (
               <div className="game-best-score">
-                <span>BEST RUN</span><strong>{score.best.toLocaleString()}</strong>
+                <span>BEST RUN</span>
+                <strong>{score.best.toLocaleString()}</strong>
               </div>
             )}
           </div>
@@ -148,7 +163,8 @@ export default function GameUI({
             <div className="game-stat game-stat-coins">
               <div className="game-stat-label">CHUTS</div>
               <div className="game-stat-value">
-                <span className="coin-mark">◆</span>{score.coinsCollected}
+                <span className="coin-mark">◆</span>
+                {score.coinsCollected}
               </div>
             </div>
           </div>
@@ -158,9 +174,15 @@ export default function GameUI({
             <div className="game-tutorial absolute inset-x-0 bottom-28 flex justify-center px-6">
               <div className="game-tutorial-panel">
                 <div className="game-gesture-row">
-                  <span>← → <span className="text-zinc-500 text-xs">lane</span></span>
-                  <span>↑ <span className="text-zinc-500 text-xs">jump</span></span>
-                  <span>↓ <span className="text-zinc-500 text-xs">slide</span></span>
+                  <span>
+                    ← → <span className="text-zinc-500 text-xs">lane</span>
+                  </span>
+                  <span>
+                    ↑ <span className="text-zinc-500 text-xs">jump</span>
+                  </span>
+                  <span>
+                    ↓ <span className="text-zinc-500 text-xs">slide</span>
+                  </span>
                 </div>
               </div>
             </div>
@@ -182,22 +204,40 @@ export default function GameUI({
             >
               CAUGHT!
             </div>
-            <div className="game-over-subtitle">
-              ACP Pradyuman got you!
-            </div>
+            <div className="game-over-subtitle">ACP Pradyuman got you!</div>
 
             {/* Scores */}
             <div className="game-results">
-              <ScoreLine label="Score" value={score.total.toLocaleString()} color="text-white" />
-              <ScoreLine label="Chuts" value={`◆ ${score.coinsCollected}`} color="text-amber-400" />
-              <ScoreLine label="Distance" value={`${Math.floor(score.distanceScore)} m`} color="text-cyan-300" />
+              <ScoreLine
+                label="Score"
+                value={score.total.toLocaleString()}
+                color="text-white"
+              />
+              <ScoreLine
+                label="Chuts"
+                value={`◆ ${score.coinsCollected}`}
+                color="text-amber-400"
+              />
+              <ScoreLine
+                label="Distance"
+                value={`${Math.floor(score.distanceScore)} m`}
+                color="text-cyan-300"
+              />
               <ScoreLine
                 label="Pink Chuts"
-                value={`◆ ${pinkCoinBalance === null ? 0 : pinkCoinBalance.toLocaleString()}`}
+                value={`◆ ${
+                  pinkCoinBalance === null
+                    ? 0
+                    : pinkCoinBalance.toLocaleString()
+                }`}
                 color="text-pink-400"
               />
               <div className="h-px bg-zinc-700/50 my-3" />
-              <ScoreLine label="Best" value={score.best.toLocaleString()} color="text-amber-300" />
+              <ScoreLine
+                label="Best"
+                value={score.best.toLocaleString()}
+                color="text-amber-300"
+              />
             </div>
 
             {/* Buttons */}
@@ -253,7 +293,9 @@ export default function GameUI({
             aria-labelledby="insufficient-coins-title"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="game-kicker character-modal-kicker">ACCESS DENIED</div>
+            <div className="game-kicker character-modal-kicker">
+              ACCESS DENIED
+            </div>
             <h2 id="insufficient-coins-title" className="character-modal-title">
               INSUFFICIENT PINK CHUTS
             </h2>
